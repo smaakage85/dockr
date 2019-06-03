@@ -1,0 +1,11 @@
+^appveyor\.yml$
+^\.travis\.yml$
+^data-raw$
+^LICENSE\.md$
+^.*Rproj$
+^README.*
+^\.Rproj\.user$
+^.*\.Rproj$
+^.*\.Rhistory$
+man/figures
+^cran-comments\.md$

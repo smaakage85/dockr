@@ -1,0 +1,13 @@
+Package: dockr
+Title: Lightweight Docker Images for R Packages
+Version: 0.8.0
+Authors@R: 
+    person(given = "Lars",
+           family = "Kjeldgaard",
+           role = c("aut", "cre"),
+           email = "lars_kjeldgaard@hotmail.com")
+Description: A toolkit to create minimal Docker images for an R package.
+Depends: R (>= 3.4.0)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
