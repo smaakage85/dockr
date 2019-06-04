@@ -9,3 +9,5 @@
 ^.*\.Rhistory$
 man/figures
 ^cran-comments\.md$
+inst/extdata
+^docker$
