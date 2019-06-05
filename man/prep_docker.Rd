@@ -6,6 +6,9 @@
 \usage{
 prep_docker(directory = "~")
 }
+\value{
+\code{list} directories and paths for Docker files.
+}
 \description{
 Prepares Docker folder in package directory.
 }
