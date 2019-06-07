@@ -2,5 +2,10 @@
 
 export(set_rocker_image)
 importFrom(cli,cat_bullet)
+importFrom(crayon,blue)
+importFrom(crayon,yellow)
+importFrom(devtools,build)
+importFrom(devtools,document)
+importFrom(gtools,getDependencies)
 importFrom(pkgload,pkg_name)
 importFrom(pkgload,pkg_version)

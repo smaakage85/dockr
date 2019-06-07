@@ -12,5 +12,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    usethis
+    cli,
+    pkgload,
+    gtools,
+    crayon,
+    devtools
 RoxygenNote: 6.1.1

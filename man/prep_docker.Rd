@@ -6,6 +6,9 @@
 \usage{
 prep_docker(directory = "~")
 }
+\arguments{
+\item{directory}{\code{character} path for Docker files.}
+}
 \value{
 \code{list} directories and paths for Docker files.
 }

@@ -1,9 +1,12 @@
 #' Prepare Docker folder
 #'
 #' Prepares Docker folder in package directory.
-#' 
+#'
+#' @param directory \code{character} path for Docker files.
+#'
 #' @return \code{list} directories and paths for Docker files.
-#' 
+#'
+#' @importFrom crayon blue yellow
 #' @importFrom cli cat_bullet
 #' @importFrom pkgload pkg_name pkg_version
 prep_docker <- function(directory = "~") {
@@ -12,44 +15,63 @@ prep_docker <- function(directory = "~") {
   directory <- path.expand(directory)
 
   # set full path of docker folder.
-  docker_folder <- file.path(directory, paste0(pkg_name(), "_", pkg_version()))
+  folder_docker <- file.path(directory, paste0(pkg_name(), "_", pkg_version()))
 
-  # check if folder already exists and is non-empty.
-  if (length(list.files(docker_folder)) > 0) {
-    cat_bullet(paste0(docker_folder, " already exists and is non-empty. Proceed with care."), 
-               bullet = "warning", 
+  # check if folder for Docker files already exists and is non-empty.
+  if (length(list.files(folder_docker)) > 0) {
+    cat_bullet("Folder: ", blue(folder_docker), " already exists and is non-empty. ", yellow("Proceed with care."),
+               bullet = "warning",
                bullet_col = "yellow")
   }
-  
+
+  # create folder for Docker files.
+  if (!dir.exists(folder_docker)) {
+    dir.create(folder_docker)
+    cat_bullet("Creating folder for Docker files: ", blue(folder_docker),
+               bullet = "tick",
+               bullet_col = "green")
+  }
+
+  # set full path of docker folder.
+  folder_source_packages <- file.path(folder_docker, "source_packages")
+
+  # check if folder for source packages exists.
+  if (dir.exists(folder_source_packages)) {
+    unlink(folder_source_packages, recursive = TRUE)
+    cat_bullet("Deleting existing folder for source packages: ", blue(folder_source_packages),
+               bullet = "tick",
+               bullet_col = "green")
+  }
+
   # create docker folder.
-  if (!dir.exists(docker_folder)) {
-    dir.create(docker_folder)
-    cat_bullet(paste0("Creating folder for Docker files:", docker_folder), 
-               bullet = "tick", 
-               bullet_col = "green")
-  }
-  
-  # set path to Docker file.
-  Dockerfile_path <- file.path(docker_folder, "Dockerfile")
-  
-  # delete any existing Dockerfile.
-  if (file.exists(Dockerfile_path)) {
-    file.remove(Dockerfile_path)
-    cat_bullet(paste0("Delete existing Dockerfile: ", Dockerfile_path), 
-               bullet = "tick", 
-               bullet_col = "green")
-  }
-  
-  # create empty Dockerfile.
-  file.create(Dockerfile_path)
-  cat_bullet(paste0("Creating empty Dockerfile: ", Dockerfile_path), 
-             bullet = "tick", 
+  dir.create(folder_source_packages)
+  cat_bullet("Creating folder for source packages: ", blue(folder_source_packages),
+             bullet = "tick",
              bullet_col = "green")
-  
+
+  # set path to Docker file.
+  path_Dockerfile <- file.path(folder_docker, "Dockerfile")
+
+  # delete any existing Dockerfile.
+  if (file.exists(path_Dockerfile)) {
+    file.remove(path_Dockerfile)
+    cat_bullet("Deleting existing Dockerfile: ", blue(path_Dockerfile),
+               bullet = "tick",
+               bullet_col = "green")
+  }
+
+  # create empty Dockerfile.
+  file.create(path_Dockerfile)
+  cat_bullet("Creating empty Dockerfile: ", blue(path_Dockerfile),
+             bullet = "tick",
+             bullet_col = "green")
+
   # return invisibly.
-  invisible(list(docker_folder = docker_folder,
-                 Dockerfile_path = Dockerfile_path))
+  invisible(list(folder_docker = folder_docker,
+                 path_Dockerfile = path_Dockerfile,
+                 folder_source_packages = folder_source_packages))
 
 }
+
 
 
