@@ -1,4 +1,4 @@
-write_dockerfile <- function() {
+write_dockerfile <- function(print_dockerfile = TRUE) {
 
   # prep docker folders and files.
   paths <- prep_docker()
@@ -6,7 +6,7 @@ write_dockerfile <- function() {
   # build and load package.
   folder_source_packages <- paths$folder_source_packages
   cat_bullet("Building and loading package...",
-             bullet = "en_dash",
+             bullet = "em_dash",
              bullet_col = "gray")
   suppressMessages(build_and_load_package(folder_source_packages))
 
@@ -22,24 +22,46 @@ write_dockerfile <- function() {
 
   # write Dockerfile.
   cat_bullet("Writing Dockerfile...",
-             bullet = "en_dash",
+             bullet = "em_dash",
              bullet_col = "gray")
 
-  # write FROM statement.
+  # preparing FROM statement.
   FROM_statement <- c("# load rocker r-base image",
                       set_rocker_image(),
                       "")
-  writeLines(FROM_statement, Dockerfile)
-  cat_bullet("Writing FROM statement to Dockerfile",
+  cat_bullet("Preparing FROM statement",
              bullet = "tick",
              bullet_col = "green")
 
-  cat_bullet("Closing Dockerfile.",
+  # preparing install statements for specific versions of CRAN packages.
+  cran_versions_statement <- create_statement_cran_versions(pkg_deps)
+  cat_bullet("Preparing install statements for specific versions of CRAN packages",
+             bullet = "tick",
+             bullet_col = "green")
+
+  # combine components into body for Dockerfile.
+  Dockerfile_body <- c(FROM_statement,
+                       cran_versions_statement)
+
+  # write contents to Dockerfile.
+  writeLines(Dockerfile_body, con = Dockerfile)
+  cat_bullet("Writing lines to Dockerfile",
              bullet = "tick",
              bullet_col = "green")
 
   # close connection to Dockerfile.
   close(Dockerfile)
+  cat_bullet("Closing Dockerfile",
+             bullet = "tick",
+             bullet_col = "green")
+
+  # print Dockerfile.
+  if (print_dockerfile) {
+    cat_bullet("Printing Contents of Dockerfile:", blue(path_Dockerfile), "\n",
+               bullet = "em_dash",
+               bullet_col = "gray")
+    print_file(path_Dockerfile)
+  }
 
   # return invisibly.
   invisible(NULL)

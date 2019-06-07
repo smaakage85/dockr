@@ -35,7 +35,8 @@ identify_dependencies(dependencies = c("Depends", "Imports",
     }
 }
 \value{
-\code{character} all dependencies.
+\code{data.frame} all dependencies with version numbers of
+the corresponding loaded packages.
 }
 \description{
 Identify Package Dependencies

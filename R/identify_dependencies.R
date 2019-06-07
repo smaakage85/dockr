@@ -2,7 +2,8 @@
 #'
 #' @inheritParams gtools::getDependencies
 #'
-#' @return \code{character} all dependencies.
+#' @return \code{data.frame} all dependencies with version numbers of
+#' the corresponding loaded packages.
 #'
 #' @importFrom gtools getDependencies
 identify_dependencies <- function(dependencies = c("Depends", "Imports", "LinkingTo"),
@@ -15,11 +16,20 @@ identify_dependencies <- function(dependencies = c("Depends", "Imports", "Linkin
   pkg_name <- pkgload::pkg_name()
 
   # get dependencies.
-  gtools::getDependencies(pkgs = pkg_name,
+  deps <- getDependencies(pkgs = pkg_name,
                           dependencies = dependencies,
                           installed = installed,
                           available = available,
                           base = base,
                           recommended = recommended)
 
+  if (length(deps) == 0) {
+    warning("No non-base dependencies detected. This will not be an",
+            " interesting Docker image..")
+    return(NULL)
   }
+
+  # get (loaded) versions of all dependency packages.
+  get_loaded_packages_versions(deps)
+
+}
