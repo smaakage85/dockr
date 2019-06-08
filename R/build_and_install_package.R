@@ -1,5 +1,4 @@
 #' @importFrom devtools document build
-#' @importFrom remotes install_local
 build_and_install_package <- function(folder_source_packages, pkgname_pkgversion) {
 
   # create documentation.
