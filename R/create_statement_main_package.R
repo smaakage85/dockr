@@ -13,8 +13,6 @@ create_statement_main_package <- function(folder_source_packages,
     "",
     paste0("# install '", pkg_name(), "' package"),
     statement,
-    "",
-    "# load package",
-    paste0("RUN R -e 'library(\"", pkg_name(), "\")'"))
+    "")
   
 }
