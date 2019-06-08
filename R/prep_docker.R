@@ -15,7 +15,8 @@ prep_docker <- function(directory = "~") {
   directory <- path.expand(directory)
 
   # set full path of docker folder.
-  folder_docker <- file.path(directory, paste0(pkg_name(), "_", pkg_version()))
+  pkgname_pkgvrs <- paste0(pkg_name(), "_", pkg_version())
+  folder_docker <- file.path(directory, pkgname_pkgvrs)
 
   # check if folder for Docker files already exists and is non-empty.
   if (length(list.files(folder_docker)) > 0) {
@@ -69,7 +70,8 @@ prep_docker <- function(directory = "~") {
   # return invisibly.
   invisible(list(folder_docker = folder_docker,
                  path_Dockerfile = path_Dockerfile,
-                 folder_source_packages = folder_source_packages))
+                 folder_source_packages = folder_source_packages,
+                 pkgname_pkgvrs = pkgname_pkgvrs))
 
 }
 

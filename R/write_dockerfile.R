@@ -1,14 +1,16 @@
-write_dockerfile <- function(print_dockerfile = TRUE) {
+#' @importFrom crayon cyan silver
+write_dockerfile <- function(print_dockerfile = FALSE) {
 
   # prep docker folders and files.
   paths <- prep_docker()
 
   # build and load package.
   folder_source_packages <- paths$folder_source_packages
-  cat_bullet("Building and loading package...",
+  cat_bullet("Building, installing and loading package...",
              bullet = "em_dash",
              bullet_col = "gray")
-  suppressMessages(build_and_load_package(folder_source_packages))
+  build_and_install_package(folder_source_packages,
+                            paths$pkgname_pkgvrs)
 
   # identify package dependencies.
   pkg_deps <- identify_dependencies()
@@ -26,7 +28,7 @@ write_dockerfile <- function(print_dockerfile = TRUE) {
              bullet_col = "gray")
 
   # preparing FROM statement.
-  FROM_statement <- c("# load rocker r-base image",
+  FROM_statement <- c("# load rocker base-R image",
                       set_rocker_image(),
                       "")
   cat_bullet("Preparing FROM statement",
@@ -57,13 +59,21 @@ write_dockerfile <- function(print_dockerfile = TRUE) {
 
   # print Dockerfile.
   if (print_dockerfile) {
-    cat_bullet("Printing Contents of Dockerfile:", blue(path_Dockerfile), "\n",
+    cat_bullet("Printing Contents of Dockerfile: ", blue(path_Dockerfile), "\n",
                bullet = "em_dash",
                bullet_col = "gray")
     print_file(path_Dockerfile)
   }
-
+  
+  # texts for user assistance.
+  cat(silver("- in R:\n"))
+  cat(silver("=> to inspect Dockerfile run:\n"))
+  cat(cyan(paste0("print_file(\"", path_Dockerfile, "\")")), "\n")
+  cat(silver("- in Shell:\n"))
+  cat(silver("=> to build Docker image navigate to"), blue(paths$folder_docker), silver("and run:\n"))
+  cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+  
   # return invisibly.
-  invisible(NULL)
+  invisible(paths)
 
 }

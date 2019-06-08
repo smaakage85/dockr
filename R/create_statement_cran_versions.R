@@ -6,11 +6,11 @@ create_statement_cran_versions <- function(deps) {
                       deps$pkg,
                       "\", \"",
                       deps$vrs,
-                      "\")",
+                      "\")'",
                       USE.NAMES = FALSE, SIMPLIFY = TRUE)
 
   # combine into one statement.
-  c("# install packages in specific versions from CRAN",
+  c("# install specific versions of packages from CRAN",
     "RUN R -e 'install.packages(\"remotes\")'",
     statement,
     "")
