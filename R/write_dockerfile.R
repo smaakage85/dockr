@@ -76,9 +76,10 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   # texts for user assistance.
   cat(silver("- in R:\n"))
   cat(silver("=> to inspect Dockerfile run:\n"))
-  cat(cyan(paste0("print_file(\"", paths$path_Dockerfile, "\")")), "\n")
+  cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
   cat(silver("- in Shell:\n"))
-  cat(silver("=> to build Docker image navigate to"), blue(paths$folder_docker), silver("and run:\n"))
+  cat(silver("=> to build Docker image run:\n"))
+  cat(cyan(paste0("cd ", paths$folder_docker)), "\n")
   cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
   
   # return invisibly.
