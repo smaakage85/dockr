@@ -8,11 +8,13 @@
 #'
 #' @importFrom crayon blue yellow
 #' @importFrom cli cat_bullet
-#' @importFrom pkgload pkg_name pkg_version
-prep_docker <- function(directory = "~") {
+#' @importFrom pkgload pkg_name pkg_version pkg_path
+prep_docker <- function(directory = NULL) {
 
   # expand directory.
-  directory <- path.expand(directory)
+  if (is.null(directory)) {
+    directory <- dirname(pkg_path())
+  }
 
   # set full path of docker folder.
   pkgname_pkgvrs <- paste0(pkg_name(), "_", pkg_version())

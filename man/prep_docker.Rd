@@ -4,7 +4,7 @@
 \alias{prep_docker}
 \title{Prepare Docker folder}
 \usage{
-prep_docker(directory = "~")
+prep_docker(directory = NULL)
 }
 \arguments{
 \item{directory}{\code{character} path for Docker files.}
