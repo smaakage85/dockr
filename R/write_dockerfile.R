@@ -13,12 +13,6 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   build_and_install_package(paths$folder_source_packages,
                             paths$pkgname_pkgvrs)
 
-  # identify package dependencies.
-  pkg_deps <- identify_dependencies()
-  cat_bullet("Identifying package dependencies",
-             bullet = "tick",
-             bullet_col = "green")
-
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)
 
@@ -35,6 +29,18 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
              bullet = "tick",
              bullet_col = "green")
 
+  # identify package dependencies.
+  pkg_deps <- identify_dependencies()
+  cat_bullet("Identifying package dependencies",
+             bullet = "tick",
+             bullet_col = "green")
+  
+  # match with CRAN packages.
+  cran_deps <- match_pkg_cran(pkg_deps)
+  cat_bullet("Matching dependencies with CRAN packages",
+             bullet = "tick",
+             bullet_col = "green")
+  
   # preparing install statements for specific versions of CRAN packages.
   cran_versions_statement <- create_statement_cran_versions(pkg_deps)
   cat_bullet("Preparing install statements for specific versions of CRAN packages",
@@ -83,6 +89,7 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
   
   # return invisibly.
-  invisible(paths)
+  invisible(list(paths = paths,
+                 cran_deps = cran_deps))
 
 }
