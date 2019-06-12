@@ -5,7 +5,10 @@ build_and_install_package <- function(folder_source_packages, pkgname_pkgversion
   document(roclets = c('rd', 'collate', 'namespace'))
 
   # build package in folder for source packages.
-  build(path = folder_source_packages, binary = FALSE, quiet = TRUE)
+  build(path = folder_source_packages, 
+        binary = FALSE, 
+        quiet = TRUE,
+        vignettes = FALSE)
 
   # install package.
   install.packages(pkgs = paste0(file.path(folder_source_packages, pkgname_pkgversion), ".tar.gz"),
