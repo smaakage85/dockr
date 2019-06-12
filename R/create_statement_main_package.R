@@ -8,7 +8,7 @@ create_statement_main_package <- function(folder_source_packages,
   statement <- paste0("RUN R -e 'install.packages(pkgs = \"", fp, "\", repos = NULL)'")
   
   # combine into one statement.
-  c("# make directory for source packages (*.tar.gz)",
+  c("# copy source_packages to container (*.tar.gz)",
     "COPY source_packages /source_packages",
     "",
     paste0("# install '", pkg_name(), "' package"),

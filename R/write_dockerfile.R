@@ -15,6 +15,7 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
 
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)
+  on.exit(close(Dockerfile))
 
   # write Dockerfile.
   cat_bullet("Writing Dockerfile...",
@@ -66,7 +67,6 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
              bullet_col = "green")
 
   # close connection to Dockerfile.
-  close(Dockerfile)
   cat_bullet("Closing Dockerfile",
              bullet = "tick",
              bullet_col = "green")

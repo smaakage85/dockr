@@ -6,7 +6,6 @@ match_pkg_cran <- function(pkgs_df) {
   ap <- as.data.frame(ap)
   ap <- ap[, c("Package", "Version")]
   ap$source <- "present"
-  # 'present'
   
   # match with desired packages.
   match_ap <- merge(x = pkgs_df, y = ap, 
