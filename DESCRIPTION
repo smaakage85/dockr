@@ -19,6 +19,6 @@ Imports:
     pkgload,
     gtools,
     crayon,
-    devtools
+    devtools,
+    recorder
 RoxygenNote: 6.1.1
-

@@ -6,13 +6,13 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   # prep docker folders and files.
   paths <- prep_docker()
 
-  # build and load package.
+  # build, install and load package.
   cat_bullet("Building, installing and loading package...",
              bullet = "em_dash",
              bullet_col = "gray")
   build_and_install_package(paths$folder_source_packages,
                             paths$pkgname_pkgvrs)
-
+browser()
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)
   on.exit(close(Dockerfile))
@@ -35,19 +35,28 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   cat_bullet("Identifying package dependencies",
              bullet = "tick",
              bullet_col = "green")
-  
+
   # match with CRAN packages.
-  cran_deps <- match_pkg_cran(pkg_deps)
+  deps_cran <- match_pkg_cran(pkg_deps)
   cat_bullet("Matching dependencies with CRAN packages",
              bullet = "tick",
              bullet_col = "green")
-  
+
+  # match with local source packages.
+  deps_local <- match_pkg_local(pkg_deps)
+  cat_bullet("Matching dependencies with local source packages",
+             bullet = "tick",
+             bullet_col = "green")
+
+  # select deps.
+  deps <- combine_deps(deps_cran, deps_local, prioritize_cran = TRUE)
+
   # preparing install statements for specific versions of CRAN packages.
   cran_versions_statement <- create_statement_cran_versions(pkg_deps)
   cat_bullet("Preparing install statements for specific versions of CRAN packages",
              bullet = "tick",
              bullet_col = "green")
-  
+
   # preparing install statement for the package itself.
   install_main_package <- create_statement_main_package(paths$folder_source_packages,
                                                         paths$pkgname_pkgvrs)
@@ -78,7 +87,7 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
                bullet_col = "gray")
     print_file(paths$path_Dockerfile)
   }
-  
+
   # texts for user assistance.
   cat(silver("- in R:\n"))
   cat(silver("=> to inspect Dockerfile run:\n"))
@@ -86,10 +95,15 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
   cat(silver("- in Shell:\n"))
   cat(silver("=> to build Docker image run:\n"))
   cat(cyan(paste0("cd ", paths$folder_docker)), "\n")
-  cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
-  
+  if (Sys.info()['sysname'] == "Linux") {
+    cat(cyan(paste0("sudo docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+  } else {
+    cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+  }
+
   # return invisibly.
   invisible(list(paths = paths,
-                 cran_deps = cran_deps))
+                 deps_cran = deps_cran,
+                 deps_local = deps_local))
 
 }

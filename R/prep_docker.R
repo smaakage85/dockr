@@ -16,11 +16,14 @@ prep_docker <- function(directory = NULL) {
     directory <- dirname(pkg_path())
   }
 
+  # check permissions for directory.
+  check_permissions_dir(directory)
+
   # set full path of docker folder.
   pkgname_pkgvrs <- paste0(pkg_name(), "_", pkg_version())
   folder_docker <- file.path(directory, pkgname_pkgvrs)
 
-  # check if folder for Docker files already exists and is non-empty.
+  # check if folder for Docker files is non-empty.
   if (length(list.files(folder_docker)) > 0) {
     cat_bullet("Folder: ", blue(folder_docker), " already exists and is non-empty. ", yellow("Proceed with care."),
                bullet = "warning",

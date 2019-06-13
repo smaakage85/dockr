@@ -1,30 +1,54 @@
-find_pkgs_local <- function(pkg = "recorder", 
-                            vrs = "0.8.1", 
-                            dir_src = "/home/lars/recorder_0.8.1/source_packages/",
-                            dir_src_docker = "/home/lars/dockr_0.8.0/source_packages/") {
-  
-  # check if dir exists.
-  if (!dir.exists(dir_src)) {
-    stop("Directory ", dir_src, " does not exist.")
+match_pkg_local <- function(pkgs_df = data.frame(pkg = c("recorder", "modelgrid"),
+                                                  vrs = c("0.8.1", "1.1.0"),
+                                                  stringsAsFactors = FALSE),
+                            dir_src = "/home/w19799@CCTA.DK/projects/recorder_0.8.1/source_packages/",
+                            dir_src_docker = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/source_packages/") {
+
+  # handle case, when there are no dependencies.
+  if (is.null(pkgs_df)) {
+    return(NULL)
   }
-  
-  # check for read permission (mode = 4).
-  if (file.access(dir_src, mode = 4) == -1) {
-    stop("Does not have read permission for: ", dir_src)
-  }
-  
-  # list files in directory.  
-  files <- list.files(dir_src)
-  
-  # is package among files?
-  pkg_file <- paste0(pkg, "_", vrs, ".tar.gz")
-  is_in_files <- pkg_file %in% files
-  
-  if (!is_in_files) {
-    return(FALSE)
-  }
-  
+
+  # handle case, where no source package directories exist.
+  # if (is.null(dir_src)) {
+  #   return(NULL)
+  # }
+
+  # look up dependencies in source package directories.
+  match_deps <- lapply(dir_src, function(x) {
+    match_pkg_local_helper(pkgs_df, x)
+    })
+
+  # bind data.frames.
+  match_deps <- do.call(rbind, match_deps)
+
+  # if a package is found in more than one directory, use directory with
+  # the highest priority.
+  match_deps <- match_deps[!duplicated(match_deps[, c("pkg", "vrs")]), ]
+
   # move .tar.gz file to Docker source packages folder.
-  file.copy(file.path(dir_src, pkg_file), dir_src_docker)
-  
+  # file.copy(file.path(dir_src, pkg_file), dir_src_docker)
+
+}
+
+match_pkg_local_helper <- function(pkgs_df, dir_src) {
+
+  # check if dir exists.
+  check_permissions_dir(dir_src, existence = TRUE, execute = TRUE, read = TRUE)
+
+  # list files in directory.
+  files <- list.files(dir_src)
+
+  # which packages among files?
+  pkg_files <- paste0(pkgs_df$pkg, "_", pkgs_df$vrs, ".tar.gz")
+  are_in_files <- which(pkg_files %in% files)
+
+  # set column with source.
+  pkgs_df$source <- dir_src
+
+  # subset packages, that are in files.
+  pkgs_df <- pkgs_df[are_in_files, ]
+
+  pkgs_df
+
 }
