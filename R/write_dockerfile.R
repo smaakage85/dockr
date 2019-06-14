@@ -12,7 +12,7 @@ write_dockerfile <- function(print_dockerfile = FALSE) {
              bullet_col = "gray")
   build_and_install_package(paths$folder_source_packages,
                             paths$pkgname_pkgvrs)
-browser()
+
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)
   on.exit(close(Dockerfile))
@@ -48,14 +48,27 @@ browser()
              bullet = "tick",
              bullet_col = "green")
 
-  # select deps.
-  deps <- combine_deps(deps_cran, deps_local, prioritize_cran = TRUE)
+  # combine and consolidate dependencies.
+  deps <- combine_deps(pkg_deps, deps_cran, deps_local, prioritize_cran = FALSE)
 
   # preparing install statements for specific versions of CRAN packages.
-  cran_versions_statement <- create_statement_cran_versions(pkg_deps)
+  cran_versions_statement <- create_statement_cran_versions(deps$deps_cran)
   cat_bullet("Preparing install statements for specific versions of CRAN packages",
              bullet = "tick",
              bullet_col = "green")
+
+  # copy any relevant source packages.
+  copy_local_pkgs(deps$deps_local)
+
+  # create copy to container statement.
+  copy_to_container_statement <- c(
+    "# copy source_packages to container (*.tar.gz)",
+    "COPY source_packages /source_packages",
+    ""
+    )
+
+  # preparing install statements for local source packages.
+  local_packages_statement <- create_statement_local_pkgs(deps$deps_local)
 
   # preparing install statement for the package itself.
   install_main_package <- create_statement_main_package(paths$folder_source_packages,
@@ -67,6 +80,8 @@ browser()
   # combine components to body for Dockerfile.
   Dockerfile_body <- c(FROM_statement,
                        cran_versions_statement,
+                       copy_to_container_statement,
+                       local_packages_statement,
                        install_main_package)
 
   # write contents to Dockerfile.
@@ -103,7 +118,7 @@ browser()
 
   # return invisibly.
   invisible(list(paths = paths,
-                 deps_cran = deps_cran,
-                 deps_local = deps_local))
+                 deps_cran = deps$deps_cran,
+                 deps_local = deps$deps_local))
 
 }

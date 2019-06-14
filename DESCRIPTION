@@ -20,5 +20,6 @@ Imports:
     gtools,
     crayon,
     devtools,
-    recorder
+    recorder,
+    pbapply
 RoxygenNote: 6.1.1
