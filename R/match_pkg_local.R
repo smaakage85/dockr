@@ -1,17 +1,30 @@
-match_pkg_local <- function(pkgs_df = data.frame(pkg = c("recorder", "modelgrid"),
-                                                  vrs = c("0.8.1", "1.1.0"),
-                                                  stringsAsFactors = FALSE),
-                            dir_src = "/home/w19799@CCTA.DK/projects/",
-                            dir_src_docker = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/source_packages/") {
+#' Match Package with Local Source Packages
+#'
+#' @param pkgs_df \code{data.frame} with packages and their respective version
+#' numbers to be matched.
+#' @param dir_src_docker \code{character} directory of subfolder with
+#' relevant source packages for a Docker image. Source packages will be copied
+#' to this directory.
+#'
+#' @inheritParams prepare_docker_image
+#'
+#' @importFrom pkgload pkg_path
+#'
+#' @return \code{data.frame} with packages, their version numbers and the
+#' directory, where the source package was found.
+match_pkg_local <- function(pkgs_df = NULL,
+                            dir_src = NULL,
+                            dir_src_docker = NULL,
+                            verbose = TRUE) {
 
   # handle case, when there are no dependencies.
   if (is.null(pkgs_df)) {
     return(NULL)
   }
 
-  # handle case, where no source package directories exist.
+  # look in parent folder of package, if no directory has been provided.
   if (is.null(dir_src)) {
-    return(NULL)
+    dir_src <- dirname(pkg_path())
   }
 
   # look up dependencies in source package directories.
@@ -26,8 +39,14 @@ match_pkg_local <- function(pkgs_df = data.frame(pkg = c("recorder", "modelgrid"
   # the highest priority.
   match_deps <- match_deps[!duplicated(match_deps[, c("pkg", "vrs")]), ]
 
-  # move .tar.gz file to Docker source packages folder.
-  # file.copy(file.path(dir_src, pkg_file), dir_src_docker)
+  # print service information.
+  if (verbose) {
+    cat_bullet("Matching dependencies with local source packages",
+               bullet = "tick",
+               bullet_col = "green")
+  }
+
+  match_deps
 
 }
 
@@ -46,7 +65,7 @@ match_pkg_local_helper <- function(pkgs_df, dir_src) {
   # set column with source.
   pkgs_df$source <- dir_src
 
-  # subset packages, that are in files.
+  # subset packages, that are found amongst the files.
   pkgs_df <- pkgs_df[are_in_files, ]
 
   pkgs_df

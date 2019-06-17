@@ -5,22 +5,13 @@
 \title{Identify Package Dependencies}
 \usage{
 identify_dependencies(dependencies = c("Depends", "Imports",
-  "LinkingTo"), installed = TRUE, available = TRUE, base = FALSE,
-  recommended = FALSE)
+  "LinkingTo"), base = FALSE, recommended = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{dependencies}{character vector of dependency types to include.
     Choices are "Depends", "Imports", "LinkingTo", "Suggests",
     and "Enhances".  Defaults to \code{c("Depends", "Imports",
       "LinkingTo")}.
-  }
-
-\item{installed}{Logical indicating whether to pull dependency
-    information from installed packages. Defaults to TRUE.
-  }
-
-\item{available}{Logical indicating whether to pull dependency
-    information from available packages.  Defaults to TRUE.
   }
 
 \item{base}{Logical indicating whether to include dependencies on base
@@ -33,11 +24,14 @@ identify_dependencies(dependencies = c("Depends", "Imports",
     installation. Defaults to
     FALSE.
     }
+
+\item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
 \code{data.frame} all dependencies with version numbers of
-the corresponding loaded packages.
+the corresponding (1) loaded or (2) installed packages.
 }
 \description{
-Identify Package Dependencies
+Identifies the dependencies of a package and the version numbers of
+the corresponding packages, that are currently loaded or installed.
 }

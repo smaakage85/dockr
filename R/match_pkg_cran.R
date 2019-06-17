@@ -1,5 +1,13 @@
+#' Match Packages with CRAN
+#'
+#' Match specific package versions with CRAN.
+#'
+#' @param pkgs_df \code{data.frame}
+#' @inheritParams prepare_docker_image
+#'
 #' @importFrom utils available.packages
-match_pkg_cran <- function(pkgs_df) {
+match_pkg_cran <- function(pkgs_df,
+                           verbose = TRUE) {
 
   # handle case when there are no dependencies.
   if (is.null(pkgs_df)) {
@@ -23,7 +31,17 @@ match_pkg_cran <- function(pkgs_df) {
   match_archive <- match_pkg_archive(no_match)
 
   # bind results.
-  rbind(match_ap, match_archive)
+  matches <- rbind(match_ap, match_archive)
+
+  # print service information.
+  if (verbose) {
+    cat_bullet("Matching dependencies with CRAN packages",
+               bullet = "tick",
+               bullet_col = "green")
+  }
+
+  # return matches.
+  matches
 
 }
 
