@@ -1,0 +1,19 @@
+---
+title: "dockr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dockr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dockr)
+```

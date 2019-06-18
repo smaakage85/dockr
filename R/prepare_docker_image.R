@@ -65,9 +65,9 @@ prepare_docker_image <- function(directory = NULL,
                                     verbose = verbose)
 
   # match with CRAN packages.
-  deps_cran <- match_pkg_cran(pkg_deps, 
+  deps_cran <- match_pkg_cran(pkg_deps,
                               verbose)
-  
+
   # look in parent folder of package, if no directory has been provided.
   if (is.null(dir_src)) {
     dir_src <- dirname(pkg_path())
@@ -90,7 +90,7 @@ prepare_docker_image <- function(directory = NULL,
                                                             verbose)
 
   # copy any relevant source packages.
-  copy_local_pkgs(deps$deps_local, 
+  copy_local_pkgs(deps$deps_local,
                   verbose = verbose,
                   dir_src = dir_src,
                   dir_src_docker = paths$folder_source_packages)
@@ -103,7 +103,7 @@ prepare_docker_image <- function(directory = NULL,
     )
 
   # preparing install statements for local source packages.
-  local_packages_statement <- 
+  local_packages_statement <-
     create_statement_local_pkgs(deps$deps_local,
                                 paths$folder_source_packages,
                                 verbose)

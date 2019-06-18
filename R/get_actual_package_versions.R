@@ -67,11 +67,11 @@ get_actual_package_versions <- function(pkgs) {
   pkg_vrs_df <- rbind(pkgs_loaded_df, pkgs_installed_df)
 
   # check if all dependency packages have been matched with a version number.
-  not_matched <- pkgs[pkgs %in% pkg_vrs_df$pkg]
+  not_matched <- pkgs[!pkgs %in% pkg_vrs_df$pkg]
   if (length(not_matched) > 0) {
     stop("One or more dependency packages were not loaded or installed. ",
          "Please install packages: ",
-         paste0(c(1,2,3), collapse = ", "))
+         paste0(not_matched, collapse = ", "))
   }
 
   # return dependencies with version numbers in data.frame.
