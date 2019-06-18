@@ -11,9 +11,10 @@
 #' printed?
 #' @param r_version \code{character} which version of R should the Docker image
 #' run in, e.g. '3.6.0'. If set to NULL, the active version will apply.
-#' #' @param dir_src \code{character} directories with local source packages. Put
+#' @param dir_src \code{character} directories with local source packages. Put
 #' directories in prioritized order. The first directory will have the highest
-#' priority.
+#' @param prioritize_cran \code{logical} should dependencies matched with
+#' CRAN be prioritized over matches with local source packages.
 #'
 #' @inheritParams gtools::getDependencies
 #'
@@ -31,7 +32,8 @@ prepare_docker_image <- function(directory = NULL,
                                  dependencies = c("Depends", "Imports", "LinkingTo"),
                                  base = FALSE,
                                  recommended = FALSE,
-                                 dir_src = NULL) {
+                                 dir_src = NULL,
+                                 prioritize_cran = TRUE) {
 
   # prep docker folders and files.
   paths <- setup_directory_for_docker(directory = directory,
@@ -63,7 +65,13 @@ prepare_docker_image <- function(directory = NULL,
                                     verbose = verbose)
 
   # match with CRAN packages.
-  deps_cran <- match_pkg_cran(pkg_deps, verbose = verbose)
+  deps_cran <- match_pkg_cran(pkg_deps, 
+                              verbose)
+  
+  # look in parent folder of package, if no directory has been provided.
+  if (is.null(dir_src)) {
+    dir_src <- dirname(pkg_path())
+  }
 
   # match with local source packages.
   deps_local <- match_pkg_local(pkg_deps,
@@ -78,10 +86,14 @@ prepare_docker_image <- function(directory = NULL,
                        prioritize_cran = FALSE)
 
   # preparing install statements for specific versions of CRAN packages.
-  cran_versions_statement <- create_statement_cran_versions(deps$deps_cran)
+  cran_versions_statement <- create_statement_cran_versions(deps$deps_cran,
+                                                            verbose)
 
   # copy any relevant source packages.
-  copy_local_pkgs(deps$deps_local)
+  copy_local_pkgs(deps$deps_local, 
+                  verbose = verbose,
+                  dir_src = dir_src,
+                  dir_src_docker = paths$folder_source_packages)
 
   # create copy to container statement.
   copy_to_container_statement <- c(
@@ -91,14 +103,15 @@ prepare_docker_image <- function(directory = NULL,
     )
 
   # preparing install statements for local source packages.
-  local_packages_statement <- create_statement_local_pkgs(deps$deps_local)
+  local_packages_statement <- 
+    create_statement_local_pkgs(deps$deps_local,
+                                paths$folder_source_packages,
+                                verbose)
 
   # preparing install statement for the package itself.
   install_main_package <- create_statement_main_package(paths$folder_source_packages,
-                                                        paths$pkgname_pkgvrs)
-  cat_bullet("Preparing install statement for the package itself",
-             bullet = "tick",
-             bullet_col = "green")
+                                                        paths$pkgname_pkgvrs,
+                                                        verbose)
 
   # combine components to body for Dockerfile.
   Dockerfile_body <- c(FROM_statement,
@@ -127,16 +140,18 @@ prepare_docker_image <- function(directory = NULL,
   }
 
   # texts for user assistance.
-  cat(silver("- in R:\n"))
-  cat(silver("=> to inspect Dockerfile run:\n"))
-  cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
-  cat(silver("- in Shell:\n"))
-  cat(silver("=> to build Docker image run:\n"))
-  cat(cyan(paste0("cd ", paths$folder_docker)), "\n")
-  if (Sys.info()['sysname'] == "Linux") {
-    cat(cyan(paste0("sudo docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
-  } else {
-    cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+  if (verbose) {
+    cat(silver("- in R:\n"))
+    cat(silver("=> to inspect Dockerfile run:\n"))
+    cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
+    cat(silver("- in Shell:\n"))
+    cat(silver("=> to build Docker image run:\n"))
+    cat(cyan(paste0("cd ", paths$folder_docker)), "\n")
+    if (Sys.info()['sysname'] == "Linux") {
+      cat(cyan(paste0("sudo docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+    } else {
+      cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
+    }
   }
 
   # return invisibly.

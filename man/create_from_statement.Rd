@@ -8,10 +8,7 @@ create_from_statement(r_version = NULL, verbose = FALSE)
 }
 \arguments{
 \item{r_version}{\code{character} which version of R should the Docker image
-run in, e.g. '3.6.0'. If set to NULL, the active version will apply.
-#' @param dir_src \code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest
-priority.}
+run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }

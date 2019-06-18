@@ -22,11 +22,6 @@ match_pkg_local <- function(pkgs_df = NULL,
     return(NULL)
   }
 
-  # look in parent folder of package, if no directory has been provided.
-  if (is.null(dir_src)) {
-    dir_src <- dirname(pkg_path())
-  }
-
   # look up dependencies in source package directories.
   match_deps <- lapply(dir_src, function(x) {
     match_pkg_local_helper(pkgs_df, x)

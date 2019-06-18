@@ -1,13 +1,12 @@
 #' Combine Identified Dependencies with CRAN and Local Source Packages
 #'
-#' @param pkg_deps \code{data.frame} all package dependencies with package name,
-#' version number.
+#' @param pkg_deps \code{data.frame} all package dependencies with package name
+#' and version number.
 #' @param deps_cran \code{data.frame} package dependencies matched with
 #' CRAN.
 #' @param deps_local \code{data.frame} package dependencies matched with
 #' local source packages.
-#' @param prioritize_cran \code{logical} should dependencies matched with
-#' CRAN be prioritized over matches with local source packages.
+#' @inheritParams prepare_docker_image
 #'
 #' @return \code{list} prioritized dependencies split into CRAN dependencies
 #' and dependencies of local source packages.

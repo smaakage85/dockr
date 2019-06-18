@@ -7,8 +7,8 @@
 combine_deps(pkg_deps, deps_cran, deps_local, prioritize_cran = FALSE)
 }
 \arguments{
-\item{pkg_deps}{\code{data.frame} all package dependencies with package name,
-version number.}
+\item{pkg_deps}{\code{data.frame} all package dependencies with package name
+and version number.}
 
 \item{deps_cran}{\code{data.frame} package dependencies matched with
 CRAN.}

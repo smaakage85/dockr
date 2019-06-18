@@ -7,7 +7,7 @@
 prepare_docker_image(directory = NULL, print_dockerfile = FALSE,
   verbose = TRUE, r_version = NULL, dependencies = c("Depends",
   "Imports", "LinkingTo"), base = FALSE, recommended = FALSE,
-  dir_src = NULL)
+  dir_src = NULL, prioritize_cran = TRUE)
 }
 \arguments{
 \item{directory}{\code{character} directory where the files for the Docker
@@ -19,10 +19,7 @@ printed?}
 \item{verbose}{\code{logical} should messages be printed or not?}
 
 \item{r_version}{\code{character} which version of R should the Docker image
-run in, e.g. '3.6.0'. If set to NULL, the active version will apply.
-#' @param dir_src \code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest
-priority.}
+run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
 
 \item{dependencies}{character vector of dependency types to include.
     Choices are "Depends", "Imports", "LinkingTo", "Suggests",
@@ -40,6 +37,12 @@ priority.}
     installation. Defaults to
     FALSE.
     }
+
+\item{dir_src}{\code{character} directories with local source packages. Put
+directories in prioritized order. The first directory will have the highest}
+
+\item{prioritize_cran}{\code{logical} should dependencies matched with
+CRAN be prioritized over matches with local source packages.}
 }
 \value{
 \code{list} relevant meta data of the files, that constitute

@@ -27,9 +27,11 @@ create_statement_cran_versions <- function(deps, verbose = TRUE) {
                  "")
 
   # print service information.
-  cat_bullet("Preparing install statements for specific versions of CRAN packages",
-             bullet = "tick",
-             bullet_col = "green")
+  if (verbose) {
+    cat_bullet("Preparing install statements for specific versions of CRAN packages",
+               bullet = "tick",
+               bullet_col = "green") 
+  }
 
   # return statement.
   statement
