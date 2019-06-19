@@ -21,7 +21,7 @@ to this directory.}
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-invisibly. As a side effect source package files (*.tar.gz) are 
+invisibly. As a side effect source package files (*.tar.gz) are
 copied to Docker subdirectory.
 }
 \description{

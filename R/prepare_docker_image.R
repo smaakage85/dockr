@@ -144,6 +144,8 @@ prepare_docker_image <- function(directory = NULL,
     cat(silver("- in R:\n"))
     cat(silver("=> to inspect Dockerfile run:\n"))
     cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
+    cat(silver("=> to edit Dockerfile run:\n"))
+    cat(cyan(paste0("dockr::write_lines_to_file([lines], \"", paths$path_Dockerfile, "\")")), "\n")
     cat(silver("- in Shell:\n"))
     cat(silver("=> to build Docker image run:\n"))
     cat(cyan(paste0("cd ", paths$folder_docker)), "\n")

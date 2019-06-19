@@ -1,7 +1,7 @@
-#' Get Version Numbers of Loaded and Installed Packages
+#' Mirror Version Numbers of Loaded and Installed Packages
 #'
-#' Gets version numbers of specific packages. If a package is loaded, the version
-#' number of the loaded package is used. If a packages is not loaded but
+#' Mirrors version numbers of specific packages. If a package is loaded, the
+#' version number of the loaded package is used. If a packages is not loaded but
 #' installed, the version number of the installed package will be extracted
 #' in sted.
 #'
@@ -10,7 +10,7 @@
 #' @return \code{data.frame} with packages and relevant version numbers.
 #'
 #' @importFrom utils sessionInfo installed.packages
-get_actual_package_versions <- function(pkgs) {
+mirror_package_versions <- function(pkgs) {
 
   # handle case, when there are no packages.
   if (is.null(pkgs)) {

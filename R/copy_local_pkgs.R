@@ -1,16 +1,16 @@
 #' Copy Local Source Packages to Docker Subdirectory
-#' 
+#'
 #' @param pkgs_df \code{data.frame} with names and version numbers of packages
 #' to be copied to Docker subdirectory.
 #'
 #' @param dir_src_docker \code{character} directory of subfolder with
 #' relevant source packages for a Docker image. Source packages will be copied
-#' to this directory. 
+#' to this directory.
 #' @inheritParams prepare_docker_image
 #'
-#' @return invisibly. As a side effect source package files (*.tar.gz) are 
+#' @return invisibly. As a side effect source package files (*.tar.gz) are
 #' copied to Docker subdirectory.
-#' 
+#'
 #' @importFrom pbapply pbmapply
 copy_local_pkgs <- function(pkgs_df = NULL,
                             dir_src = NULL,
@@ -23,7 +23,12 @@ copy_local_pkgs <- function(pkgs_df = NULL,
     return(invisible(NULL))
   }
 
-  # copy packages.
+  if (verbose) {
+    cat_bullet("Copying local source packages to: ", blue(dir_src_docker),
+               bullet = "em_dash",
+               bullet_col = "gray")
+  }
+
   pbmapply(
     FUN = copy_local_pkgs_helper,
     pkg = pkgs_df$pkg,

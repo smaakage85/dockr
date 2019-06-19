@@ -3,6 +3,7 @@
 export(prepare_docker_image)
 export(print_file)
 export(set_rocker_image)
+export(write_lines_to_file)
 importFrom(cli,cat_bullet)
 importFrom(crayon,blue)
 importFrom(crayon,cyan)

@@ -35,8 +35,8 @@ identify_dependencies <- function(dependencies = c("Depends", "Imports", "Linkin
     return(NULL)
   }
 
-  # get loaded (and installed) version numbers of all dependency packages.
-  loaded_deps <- get_actual_package_versions(deps)
+  # mirror loaded (and installed) version numbers of all dependency packages.
+  loaded_deps <- mirror_package_versions(deps)
 
   # print service information.
   if (verbose) {

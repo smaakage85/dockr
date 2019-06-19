@@ -28,7 +28,7 @@ setup_directory_for_docker <- function(directory = NULL,
   # check if folder for Docker files is non-empty.
   if (length(list.files(folder_docker)) > 0) {
     if (verbose) {
-      cat_bullet("Folder: ", blue(folder_docker), " already exists and is non-empty. ", yellow("Proceed with care."),
+      cat_bullet("Folder: ", blue(folder_docker), " already exists and is non-empty. ", yellow("Proceed with care!"),
                  bullet = "warning",
                  bullet_col = "yellow")
     }
