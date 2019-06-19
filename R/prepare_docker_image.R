@@ -24,7 +24,7 @@
 #'
 #' @export
 #'
-#' @importFrom crayon cyan silver
+#' @importFrom crayon cyan silver yellow
 prepare_docker_image <- function(directory = NULL,
                                  print_dockerfile = FALSE,
                                  verbose = TRUE,
@@ -127,7 +127,7 @@ prepare_docker_image <- function(directory = NULL,
              bullet_col = "green")
 
   # close connection to Dockerfile.
-  cat_bullet("Closing Dockerfile",
+  cat_bullet("Closing connection to Dockerfile",
              bullet = "tick",
              bullet_col = "green")
 
@@ -141,12 +141,12 @@ prepare_docker_image <- function(directory = NULL,
 
   # texts for user assistance.
   if (verbose) {
-    cat(silver("- in R:\n"))
+    cat(silver("- in", blue("R"), silver(":"), "\n"))
     cat(silver("=> to inspect Dockerfile run:\n"))
     cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
     cat(silver("=> to edit Dockerfile run:\n"))
     cat(cyan(paste0("dockr::write_lines_to_file([lines], \"", paths$path_Dockerfile, "\")")), "\n")
-    cat(silver("- in Shell:\n"))
+    cat(silver("- in", yellow("Shell"), silver(":"), "\n"))
     cat(silver("=> to build Docker image run:\n"))
     cat(cyan(paste0("cd ", paths$folder_docker)), "\n")
     if (Sys.info()['sysname'] == "Linux") {
@@ -156,9 +156,9 @@ prepare_docker_image <- function(directory = NULL,
     }
   }
 
-  # return invisibly.
-  invisible(list(paths = paths,
-                 deps_cran = deps$deps_cran,
-                 deps_local = deps$deps_local))
+  # return relevant information and meta data.
+  list(paths = paths,
+       deps_cran = deps$deps_cran,
+       deps_local = deps$deps_local)
 
 }
