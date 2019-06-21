@@ -2,14 +2,12 @@
 #'
 #' @param pkgs_df \code{data.frame} with names and version numbers of desired
 #' packages.
-#' @param dir_src_docker \code{character} directory of subfolder with
-#' relevant source packages for a Docker image. Source packages will be copied
-#' to this directory.
 #' @inheritParams prepare_docker_image
+#' @inheritParams match_pkg_local
 #'
 #' @return \code{character} install chunk for Dockerfile.
 create_statement_local_pkgs <- function(pkgs_df,
-                                        dir_src_docker = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/source_packages/",
+                                        dir_src_docker = "",
                                         verbose = TRUE) {
 
   # handle case, when no local dependencies are required.
@@ -37,15 +35,15 @@ create_statement_local_pkgs <- function(pkgs_df,
   statements <- c("# install local source packages",
     statements,
     "")
-  
+
   # print service information.
   if (verbose) {
     cat_bullet("Preparing install statements for local source packages",
                bullet = "tick",
-               bullet_col = "green") 
+               bullet_col = "green")
   }
-  
+
   statements
-  
+
 
 }

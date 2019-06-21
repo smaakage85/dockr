@@ -1,13 +1,13 @@
 #' Create Install Statement for Main Package
 #'
-#' @param folder_source_packages \code{character} directory of subfolder with
-#' relevant source packages for a Docker image. 
+#' @param dir_source_packages \code{character} directory of subfolder with
+#' relevant source packages for a Docker image.
 #' @param pkgname_pkgversion \code{character} package name and package version
 #' number for main package - concatenated.
 #' @inheritParams prepare_docker_image
 #'
 #' @return \code{character} chunk with install statement for Dockerfile.
-create_statement_main_package <- function(folder_source_packages,
+create_statement_main_package <- function(dir_source_packages,
                                           pkgname_pkgversion,
                                           verbose = TRUE) {
 
@@ -21,13 +21,13 @@ create_statement_main_package <- function(folder_source_packages,
   statement <- c(paste0("# install '", pkg_name(), "' package"),
     statement,
     "")
-  
+
   if (verbose) {
     cat_bullet("Preparing install statement for the package itself",
                bullet = "tick",
-               bullet_col = "green")  
+               bullet_col = "green")
   }
-  
+
   statement
 
 }

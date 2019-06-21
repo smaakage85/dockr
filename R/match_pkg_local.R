@@ -2,9 +2,9 @@
 #'
 #' @param pkgs_df \code{data.frame} with packages and their respective version
 #' numbers to be matched.
-#' @param dir_src_docker \code{character} directory of subfolder with
-#' relevant source packages for a Docker image. Source packages will be copied
-#' to this directory.
+#' @param dir_src_docker \code{character} subdirectory of Docker image
+#' directory with relevant source packages, that will be installed in the Docker
+#' container. Relevant local source packages will be copied to this directory.
 #'
 #' @inheritParams prepare_docker_image
 #'

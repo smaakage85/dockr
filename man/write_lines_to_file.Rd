@@ -4,9 +4,8 @@
 \alias{write_lines_to_file}
 \title{Write Lines to File}
 \usage{
-write_lines_to_file(lines,
-  filepath = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/Dockerfile",
-  prepend = FALSE, print_file = TRUE)
+write_lines_to_file(lines, filepath = "", prepend = FALSE,
+  print_file = TRUE)
 }
 \arguments{
 \item{lines}{\code{character} lines that will be written to file.}

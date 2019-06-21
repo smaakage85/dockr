@@ -5,7 +5,7 @@
 #'
 #' @inheritParams prepare_docker_image
 #'
-#' @param folder_source_packages \code{character} directory containing local
+#' @param dir_source_packages \code{character} directory containing local
 #' source packages, that will be built into the Docker image.
 #' @param pkgname_pkgversion \code{character} the package name concatenated
 #' with the version number of the package.
@@ -16,7 +16,7 @@
 #'
 #' @importFrom devtools document build
 #' @importFrom utils install.packages
-build_and_install_package <- function(folder_source_packages,
+build_and_install_package <- function(dir_source_packages,
                                       pkgname_pkgversion,
                                       verbose = FALSE) {
 
@@ -30,13 +30,13 @@ build_and_install_package <- function(folder_source_packages,
   document(roclets = c('rd', 'collate', 'namespace'))
 
   # build package in folder for source packages.
-  build(path = folder_source_packages,
+  build(path = dir_source_packages,
         binary = FALSE,
         quiet = TRUE,
         vignettes = FALSE)
 
   # install package.
-  install.packages(pkgs = paste0(file.path(folder_source_packages, pkgname_pkgversion), ".tar.gz"),
+  install.packages(pkgs = paste0(file.path(dir_source_packages, pkgname_pkgversion), ".tar.gz"),
                    repos = NULL)
 
 

@@ -12,7 +12,7 @@
 #'
 #' @export
 write_lines_to_file <- function(lines,
-                              filepath = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/Dockerfile",
+                              filepath = "",
                               prepend = FALSE,
                               print_file = TRUE) {
 

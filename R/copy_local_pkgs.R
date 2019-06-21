@@ -3,10 +3,8 @@
 #' @param pkgs_df \code{data.frame} with names and version numbers of packages
 #' to be copied to Docker subdirectory.
 #'
-#' @param dir_src_docker \code{character} directory of subfolder with
-#' relevant source packages for a Docker image. Source packages will be copied
-#' to this directory.
 #' @inheritParams prepare_docker_image
+#' @inheritParams match_pkg_local
 #'
 #' @return invisibly. As a side effect source package files (*.tar.gz) are
 #' copied to Docker subdirectory.

@@ -11,7 +11,7 @@ prepare_docker_image(directory = NULL, print_dockerfile = FALSE,
 }
 \arguments{
 \item{directory}{\code{character} directory where the files for the Docker
-image are put.}
+image are put, and from where the Docker image can be build.}
 
 \item{print_dockerfile}{\code{logical} should the resulting Dockerfile be
 printed?}
@@ -39,7 +39,8 @@ run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
     }
 
 \item{dir_src}{\code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest}
+directories in prioritized order. The first directory will have the highest
+priority.}
 
 \item{prioritize_cran}{\code{logical} should dependencies matched with
 CRAN be prioritized over matches with local source packages.}
@@ -50,7 +51,9 @@ the Docker image. As a side effect the files for the Docker image -
 including the resulting Dockerfile - are saved in the desired directory.
 }
 \description{
-Prepares Docker image for the package by (1) looking up its dependencies,
-(2) linking them to the right repositories and finally (3) creating all of
-the necessary files for the image - including the Dockerfile.
+Prepares a Docker image for your R package by (1) identifying its R
+dependency packages, (2) looking up, what versions of these packages that
+are presently loaded or, subsidiarily, installed, (3) linking these specific
+dependencies to the right repositories and finally (4) creating all of the
+necessary files the Docker image - including the Dockerfile.
 }

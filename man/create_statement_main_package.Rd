@@ -4,11 +4,11 @@
 \alias{create_statement_main_package}
 \title{Create Install Statement for Main Package}
 \usage{
-create_statement_main_package(folder_source_packages, pkgname_pkgversion,
+create_statement_main_package(dir_source_packages, pkgname_pkgversion,
   verbose = TRUE)
 }
 \arguments{
-\item{folder_source_packages}{\code{character} directory of subfolder with
+\item{dir_source_packages}{\code{character} directory of subfolder with
 relevant source packages for a Docker image.}
 
 \item{pkgname_pkgversion}{\code{character} package name and package version

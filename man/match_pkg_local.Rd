@@ -12,11 +12,12 @@ match_pkg_local(pkgs_df = NULL, dir_src = NULL,
 numbers to be matched.}
 
 \item{dir_src}{\code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest}
+directories in prioritized order. The first directory will have the highest
+priority.}
 
-\item{dir_src_docker}{\code{character} directory of subfolder with
-relevant source packages for a Docker image. Source packages will be copied
-to this directory.}
+\item{dir_src_docker}{\code{character} subdirectory of Docker image
+directory with relevant source packages, that will be installed in the Docker
+container. Relevant local source packages will be copied to this directory.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }

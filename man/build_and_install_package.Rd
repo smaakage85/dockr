@@ -4,11 +4,11 @@
 \alias{build_and_install_package}
 \title{Build, Install and Load Package}
 \usage{
-build_and_install_package(folder_source_packages, pkgname_pkgversion,
+build_and_install_package(dir_source_packages, pkgname_pkgversion,
   verbose = FALSE)
 }
 \arguments{
-\item{folder_source_packages}{\code{character} directory containing local
+\item{dir_source_packages}{\code{character} directory containing local
 source packages, that will be built into the Docker image.}
 
 \item{pkgname_pkgversion}{\code{character} the package name concatenated

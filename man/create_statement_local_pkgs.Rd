@@ -4,17 +4,16 @@
 \alias{create_statement_local_pkgs}
 \title{Create Install Statements for Local Source Packages}
 \usage{
-create_statement_local_pkgs(pkgs_df,
-  dir_src_docker = "/home/w19799@CCTA.DK/projects/dockr_0.8.0/source_packages/",
+create_statement_local_pkgs(pkgs_df, dir_src_docker = "",
   verbose = TRUE)
 }
 \arguments{
 \item{pkgs_df}{\code{data.frame} with names and version numbers of desired
 packages.}
 
-\item{dir_src_docker}{\code{character} directory of subfolder with
-relevant source packages for a Docker image. Source packages will be copied
-to this directory.}
+\item{dir_src_docker}{\code{character} subdirectory of Docker image
+directory with relevant source packages, that will be installed in the Docker
+container. Relevant local source packages will be copied to this directory.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
