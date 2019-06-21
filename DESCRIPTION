@@ -1,15 +1,14 @@
 Package: dockr
-Title: Lightweight Docker Images for R Packages
+Title: Creation of Lightweight Docker Images for R Packages
 Version: 0.8.0
 Authors@R: 
     person(given = "Lars",
            family = "Kjeldgaard",
            role = c("aut", "cre"),
            email = "lars_kjeldgaard@hotmail.com")
-Description: A small toolkit to create a minimal Docker image for an R package. 
-   The package dependencies are identified and set in the Dockerfile, such that 
-   they reflect the exact versions in the present R session. Hence the Docker 
-   image will mirror the current session.
+Description: Build a lightweight Docker image from your R package, in which the
+    package itself is installed and available. The image seeks to mirror your R 
+    session as close as possible with respect to R specific dependencies.
 Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
