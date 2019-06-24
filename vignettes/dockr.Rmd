@@ -37,8 +37,18 @@ Or install the version released on CRAN:
 install.packages("dockr")
 ```
 
-# 
 
 ```{r setup}
 library(dockr)
 ```
+
+## dockr
+
+When working on an R project, it is often desirable to organize the code in an
+R package. 
+
+
+
+
+
+
