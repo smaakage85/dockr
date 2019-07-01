@@ -1,0 +1,58 @@
+---
+title: "dockr hits CRAN"
+output:
+  html_document: default
+  pdf_document: default
+---
+---
+title: "'dockr' hits CRAN"
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# dockr
+
+`dockr` 0.8.0 is now available on CRAN. `dockr` is a minimal toolkit to build a 
+lightweight Docker image from your R package, in which the package itself is 
+installed and available. The image seeks to mirror your R session as close as 
+possible with respect to R specific dependencies.
+
+## Installation
+
+Install the development version of `dockr` with:
+
+```{r, eval = FALSE}
+remotes::install_github("smaakage85/dockr")
+```
+
+Or install the version released on CRAN: 
+
+```{r, eval = FALSE}
+install.packages("dockr")
+```
+
+
+```{r setup, eval = TRUE}
+library(dockr)
+```
+
+## Workflow
+
+When you work on an R project, it is often desirable to organize the code in an
+R package. `dockr` prepares a Docker container image that mirrors your R session
+and includes all of the R dependencies needed to run your R package. 
+
+```{r, warning = FALSE, message = FALSE}
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+prepare_docker_image()
+```

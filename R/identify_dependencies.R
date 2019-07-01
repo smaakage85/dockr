@@ -13,13 +13,14 @@
 #' the corresponding (1) loaded or (2) installed packages.
 #'
 #' @importFrom gtools getDependencies
-identify_dependencies <- function(dependencies = c("Depends", "Imports", "LinkingTo"),
+identify_dependencies <- function(pkg = pkg,
+                                  dependencies = c("Depends", "Imports", "LinkingTo"),
                                   base = FALSE,
                                   recommended = FALSE,
                                   verbose = TRUE) {
 
   # get package name.
-  pkg_name <- pkg_name()
+  pkg_name <- pkg_name(pkg)
 
   # get dependencies.
   deps <- getDependencies(pkgs = pkg_name,
@@ -30,8 +31,7 @@ identify_dependencies <- function(dependencies = c("Depends", "Imports", "Linkin
                           recommended = recommended)
 
   if (length(deps) == 0) {
-    warning("No non-base dependencies detected. This will not be an",
-            " interesting Docker image..")
+    message("No non-base dependencies detected.")
     return(NULL)
   }
 

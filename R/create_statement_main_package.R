@@ -9,7 +9,8 @@
 #' @return \code{character} chunk with install statement for Dockerfile.
 create_statement_main_package <- function(dir_source_packages,
                                           pkgname_pkgversion,
-                                          verbose = TRUE) {
+                                          verbose = TRUE,
+                                          pkg = pkg) {
 
   # create source package filepath as character.
   fp <- paste0(file.path("source_packages", pkgname_pkgversion), ".tar.gz")
@@ -18,7 +19,7 @@ create_statement_main_package <- function(dir_source_packages,
   statement <- paste0("RUN R -e 'install.packages(pkgs = \"", fp, "\", repos = NULL)'")
 
   # combine into one statement.
-  statement <- c(paste0("# install '", pkg_name(), "' package"),
+  statement <- c(paste0("# install '", pkg_name(pkg), "' package"),
     statement,
     "")
 

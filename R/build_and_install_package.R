@@ -4,6 +4,7 @@
 #' is built and saved into the directory with the Docker files.
 #'
 #' @inheritParams prepare_docker_image
+#' @inheritParams devtools::build
 #'
 #' @param dir_source_packages \code{character} directory containing local
 #' source packages, that will be built into the Docker image.
@@ -16,7 +17,8 @@
 #'
 #' @importFrom devtools document build
 #' @importFrom utils install.packages
-build_and_install_package <- function(dir_source_packages,
+build_and_install_package <- function(pkg = ".",
+                                      dir_source_packages,
                                       pkgname_pkgversion,
                                       verbose = FALSE) {
 
@@ -27,10 +29,12 @@ build_and_install_package <- function(dir_source_packages,
   }
 
   # create documentation.
-  document(roclets = c('rd', 'collate', 'namespace'))
+  document(pkg = pkg,
+           roclets = c('rd', 'collate', 'namespace'))
 
   # build package in folder for source packages.
-  build(path = dir_source_packages,
+  build(pkg = pkg,
+        path = dir_source_packages,
         binary = FALSE,
         quiet = TRUE,
         vignettes = FALSE)

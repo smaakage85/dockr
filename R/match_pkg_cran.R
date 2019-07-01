@@ -5,7 +5,7 @@
 #' @param pkgs_df \code{data.frame}
 #' @inheritParams prepare_docker_image
 #'
-#' @importFrom utils available.packages
+#' @importFrom utils available.packages contrib.url
 match_pkg_cran <- function(pkgs_df,
                            verbose = TRUE) {
 

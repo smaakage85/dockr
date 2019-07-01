@@ -11,7 +11,7 @@ create_statement_local_pkgs <- function(pkgs_df,
                                         verbose = TRUE) {
 
   # handle case, when no local dependencies are required.
-  if (is.null(pkgs_df)) {
+  if (is.null(pkgs_df) || nrow(pkgs_df) == 0) {
     return(NULL)
   }
 

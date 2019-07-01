@@ -4,25 +4,27 @@
 #' Docker image and an empty Dockerfile.
 #'
 #' @inheritParams prepare_docker_image
+#' @inheritParams devtools::build
 #'
 #' @return \code{list} directories and paths for Docker files.
 #'
 #' @importFrom crayon blue yellow
 #' @importFrom cli cat_bullet
 #' @importFrom pkgload pkg_name pkg_version pkg_path
-setup_dir_image <- function(directory = NULL,
+setup_dir_image <- function(pkg = ".",
+                            directory = NULL,
                             verbose = FALSE) {
 
   # expand directory.
   if (is.null(directory)) {
-    directory <- dirname(pkg_path())
+    directory <- dirname(pkg_path(path = pkg))
   }
 
   # check permissions for directory.
   check_permissions_dir(directory)
 
   # set full path of docker folder.
-  pkgname_pkgvrs <- paste0(pkg_name(), "_", pkg_version())
+  pkgname_pkgvrs <- paste0(pkg_name(path = pkg), "_", pkg_version(path = pkg))
   dir_image <- file.path(directory, pkgname_pkgvrs)
 
   # check if folder for Docker files is non-empty.

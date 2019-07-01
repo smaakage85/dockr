@@ -20,6 +20,7 @@
 #' CRAN be prioritized over matches with local source packages.
 #'
 #' @inheritParams gtools::getDependencies
+#' @inheritParams devtools::build
 #'
 #' @return \code{list} relevant meta data of the files, that constitute
 #' the Docker image. As a side effect the files for the Docker image -
@@ -28,7 +29,8 @@
 #' @export
 #'
 #' @importFrom crayon cyan silver yellow
-prepare_docker_image <- function(directory = NULL,
+prepare_docker_image <- function(pkg = ".",
+                                 directory = NULL,
                                  print_dockerfile = FALSE,
                                  verbose = TRUE,
                                  r_version = NULL,
@@ -39,11 +41,13 @@ prepare_docker_image <- function(directory = NULL,
                                  prioritize_cran = TRUE) {
 
   # prep docker folders and files.
-  paths <- setup_dir_image(directory = directory,
+  paths <- setup_dir_image(pkg = pkg,
+                           directory = directory,
                            verbose = verbose)
 
   # build, install and load package.
-  build_and_install_package(paths$dir_source_packages,
+  build_and_install_package(pkg = pkg,
+                            paths$dir_source_packages,
                             paths$pkgname_pkgvrs,
                             verbose)
 
@@ -62,7 +66,8 @@ prepare_docker_image <- function(directory = NULL,
   FROM_statement <- create_from_statement(r_version, verbose)
 
   # identify package dependencies.
-  pkg_deps <- identify_dependencies(dependencies = dependencies,
+  pkg_deps <- identify_dependencies(pkg = pkg,
+                                    dependencies = dependencies,
                                     base = base,
                                     recommended = recommended,
                                     verbose = verbose)
@@ -114,7 +119,8 @@ prepare_docker_image <- function(directory = NULL,
   # preparing install statement for the package itself.
   install_main_package <- create_statement_main_package(paths$dir_source_packages,
                                                         paths$pkgname_pkgvrs,
-                                                        verbose)
+                                                        verbose,
+                                                        pkg)
 
   # combine components to body for Dockerfile.
   Dockerfile_body <- c(FROM_statement,
@@ -144,19 +150,11 @@ prepare_docker_image <- function(directory = NULL,
 
   # texts for user assistance.
   if (verbose) {
-    cat(silver("- in", blue("R"), silver(":"), "\n"))
-    cat(silver("=> to inspect Dockerfile run:\n"))
-    cat(cyan(paste0("dockr::print_file(\"", paths$path_Dockerfile, "\")")), "\n")
-    cat(silver("=> to edit Dockerfile run:\n"))
-    cat(cyan(paste0("dockr::write_lines_to_file([lines], \"", paths$path_Dockerfile, "\")")), "\n")
-    cat(silver("- in", yellow("Shell"), silver(":"), "\n"))
-    cat(silver("=> to build Docker image run:\n"))
-    cat(cyan(paste0("cd ", paths$dir_image)), "\n")
-    if (Sys.info()['sysname'] == "Linux") {
-      cat(cyan(paste0("sudo docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
-    } else {
-      cat(cyan(paste0("docker build -t ", paths$pkgname_pkgvrs, " .")), "\n")
-    }
+    print_end_service_information(
+      path_Dockerfile = paths$path_Dockerfile,
+      dir_image = paths$dir_image,
+      pkgname_pkgvrs = paths$pkgname_pkgvrs
+    )
   }
 
   # return relevant information and meta data.

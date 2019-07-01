@@ -13,7 +13,7 @@
 combine_deps <- function(pkg_deps, deps_cran, deps_local, prioritize_cran = FALSE) {
 
   # handle case, when there are no dependencies.
-  if (is.null(pkg_deps)) {
+  if (is.null(pkg_deps) || nrow(pkg_deps) == 0) {
     return(NULL)
   }
 
@@ -29,7 +29,7 @@ combine_deps <- function(pkg_deps, deps_cran, deps_local, prioritize_cran = FALS
 
   # identify any overlap of packages between CRAN and local directories.
   pkg_overlap <- deps_cran[deps_cran$pkg %in% deps_local$pkg, c("pkg", "vrs")]
-  if (length(pkg_overlap) > 0) {
+  if (is.null(pkg_overlap) || nrow(pkg_overlap) == 0) {
     message("The following dependency packages were found both on CRAN and in local directories: \n",
             paste(pkg_overlap$pkg, pkg_overlap$vrs, sep = "_", collapse = ", "))
     if (prioritize_cran) {

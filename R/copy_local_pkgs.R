@@ -16,7 +16,7 @@ copy_local_pkgs <- function(pkgs_df = NULL,
                             verbose = TRUE) {
 
   # handle case, when there are no dependencies.
-  if (is.null(pkgs_df)) {
+  if (is.null(pkgs_df) || nrow(pkgs_df) == 0) {
     # return invisibly.
     return(invisible(NULL))
   }
