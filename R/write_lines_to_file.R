@@ -12,9 +12,9 @@
 #'
 #' @export
 write_lines_to_file <- function(lines,
-                              filepath = "",
-                              prepend = FALSE,
-                              print_file = TRUE) {
+                                filepath = "",
+                                prepend = FALSE,
+                                print_file = TRUE) {
 
   # validate inputs.
   if (!is.character(lines)) {
@@ -25,21 +25,20 @@ write_lines_to_file <- function(lines,
     stop("'lines' must have a positive length.")
   }
 
-
   if (prepend) {
     # read existing contents of file.
     text <- readChar(filepath, file.info(filepath)$size)
+    text <- strsplit(text, "\r\n")
+    text <- unlist(text)
     # write lines plus existing contents to file.
-    write(c(lines, text),
+    write(unlist(c(lines, text)),
           filepath,
-          append = FALSE,
-          sep = "\n")
+          append = FALSE)
   } else {
     # append new lines to file.
     write(lines,
           filepath,
-          append = TRUE,
-          sep = "\n")
+          append = TRUE)
   }
 
   # print resulting file.

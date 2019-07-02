@@ -4,10 +4,12 @@
 \alias{build_and_install_package}
 \title{Build, Install and Load Package}
 \usage{
-build_and_install_package(dir_source_packages, pkgname_pkgversion,
-  verbose = FALSE)
+build_and_install_package(pkg = ".", dir_source_packages,
+  pkgname_pkgversion, verbose = FALSE)
 }
 \arguments{
+\item{pkg}{Path to a package, or within a package.}
+
 \item{dir_source_packages}{\code{character} directory containing local
 source packages, that will be built into the Docker image.}
 

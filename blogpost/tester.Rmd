@@ -4,11 +4,6 @@ output:
   html_document: default
   pdf_document: default
 ---
----
-title: "'dockr' hits CRAN"
-
----
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
@@ -27,32 +22,121 @@ lightweight Docker image from your R package, in which the package itself is
 installed and available. The image seeks to mirror your R session as close as 
 possible with respect to R specific dependencies.
 
+If you want to know, how Docker works, and why you should consider using Docker,
+please take a look at the [Docker website](https://www.docker.com/why-docker).
+
 ## Installation
 
 Install the development version of `dockr` with:
 
-```{r, eval = FALSE}
+```{r install_github, eval = FALSE}
 remotes::install_github("smaakage85/dockr")
 ```
 
 Or install the version released on CRAN: 
 
-```{r, eval = FALSE}
+```{r install_cran, eval = FALSE}
 install.packages("dockr")
-```
-
-
-```{r setup, eval = TRUE}
-library(dockr)
 ```
 
 ## Workflow
 
 When you work on an R project, it is often desirable to organize the code in an
-R package. `dockr` prepares a Docker container image that mirrors your R session
-and includes all of the R dependencies needed to run your R package. 
+R package. `dockr` facilitates easy creation of a Docker container image that 
+mirrors your R session and includes all of the R dependencies needed to run 
+your R package. 
+
+Load the `dockr` package.
+
+```{r load, eval = TRUE}
+# load dockr.
+library(dockr)
+```
+
+```{r setup_cran, echo = FALSE}
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+```
+
+In order do create the files for the Docker image simply invoke the 
+`prepare_docker_image()` function and point to the folder with your package. 
+The workflow of `prepare_docker_image()` is summarized below:
+
+1. Build and install the package on your system (just like `devtools::build()`)
+2. Identify R package dependencies of the package
+3. Detect the version numbers of the loaded and installed versions of these 
+packages on your system
+4. Write Dockerfile and create all other files for the Docker image
+
+Now, I will let `dockr` do its magic and create the files for a Docker image
+container, in which `dockr` is installed together with all of the package 
+dependencies, `dockr` needs to run.
 
 ```{r, warning = FALSE, message = FALSE}
-options(repos = c(CRAN = "https://cran.rstudio.com/"))
-prepare_docker_image()
+image <- prepare_docker_image(".")
 ```
+
+Great, all necessary files for the Docker image have been created, and you 
+can build the Docker image right away by following the instructions. It is as 
+easy as that! Yeah!
+
+## Files for Docker image
+
+Let us just take a quick look into the folder with the files for the Docker 
+image and see the works of `dockr`.
+
+```{r}
+list.files(image$paths$dir_image)
+```
+
+It contains a Dockerfile and a folder named 'source_packages'.
+
+### Dockerfile
+
+The resulting Dockerfile can be printed with the `print_file()` function:
+
+```{r}
+print_file(image$paths$path_Dockerfile)
+```
+
+### Folder with Source Packages
+
+The 'source_packages' folder contains the local (non-CRAN) packages, that have 
+to be installed in the Docker image container in order for `dockr` to run.
+
+Since `dockr` does not depend on any local (non-CRAN) `source_packages` only 
+contains a source package version of `dockr` itself, i.e.:
+
+```{r}
+list.files(image$paths$dir_source_packages)
+```
+
+## How to edit Dockerfile
+
+If there is need for adding additional lines to the Dockerfile, this can be 
+achieved with the `write_lines_to_file()` function. `write_lines_to_file` 
+enables you to add new lines to the beginning or the end of the Dockerfile. 
+
+Let us try it out and write a couple of additional lines to the Dockerfile.
+
+```{r}
+# write lines to beginning of file.
+write_lines_to_file(c("# set maintainer",
+                    "MAINTAINER Lars KJELDGAARD <lars_kjeldgaard@hotmail.com>", 
+                    ""),
+                    image$paths$path_Dockerfile,
+                    prepend = TRUE,
+                    print_file = FALSE)
+
+# write lines to beginning of file.
+write_lines_to_file(c("# check out smaakage85.netlify.com >:-]~~", "smaakage"),
+                    image$paths$path_Dockerfile,
+                    prepend = FALSE,
+                    print_file = TRUE)
+```
+
+
+
+
+
+
+

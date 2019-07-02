@@ -4,12 +4,14 @@
 \alias{prepare_docker_image}
 \title{Prepare Docker Image}
 \usage{
-prepare_docker_image(directory = NULL, print_dockerfile = FALSE,
-  verbose = TRUE, r_version = NULL, dependencies = c("Depends",
-  "Imports", "LinkingTo"), base = FALSE, recommended = FALSE,
-  dir_src = NULL, prioritize_cran = TRUE)
+prepare_docker_image(pkg = ".", directory = NULL,
+  print_dockerfile = FALSE, verbose = TRUE, r_version = NULL,
+  dependencies = c("Depends", "Imports", "LinkingTo"), base = FALSE,
+  recommended = FALSE, dir_src = NULL, prioritize_cran = TRUE)
 }
 \arguments{
+\item{pkg}{Path to a package, or within a package.}
+
 \item{directory}{\code{character} directory where the files for the Docker
 image are put, and from where the Docker image can be build.}
 

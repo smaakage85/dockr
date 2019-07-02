@@ -4,9 +4,11 @@
 \alias{setup_dir_image}
 \title{Setup Directory for Docker Image}
 \usage{
-setup_dir_image(directory = NULL, verbose = FALSE)
+setup_dir_image(pkg = ".", directory = NULL, verbose = FALSE)
 }
 \arguments{
+\item{pkg}{Path to a package, or within a package.}
+
 \item{directory}{\code{character} directory where the files for the Docker
 image are put, and from where the Docker image can be build.}
 

@@ -5,7 +5,7 @@
 \title{Create Install Statement for Main Package}
 \usage{
 create_statement_main_package(dir_source_packages, pkgname_pkgversion,
-  verbose = TRUE)
+  verbose = TRUE, pkg = pkg)
 }
 \arguments{
 \item{dir_source_packages}{\code{character} directory of subfolder with
@@ -15,6 +15,8 @@ relevant source packages for a Docker image.}
 number for main package - concatenated.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
+
+\item{pkg}{Path to a package, or within a package.}
 }
 \value{
 \code{character} chunk with install statement for Dockerfile.

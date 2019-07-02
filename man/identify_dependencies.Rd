@@ -4,10 +4,12 @@
 \alias{identify_dependencies}
 \title{Identify Package Dependencies}
 \usage{
-identify_dependencies(dependencies = c("Depends", "Imports",
+identify_dependencies(pkg = pkg, dependencies = c("Depends", "Imports",
   "LinkingTo"), base = FALSE, recommended = FALSE, verbose = TRUE)
 }
 \arguments{
+\item{pkg}{Path to a package, or within a package.}
+
 \item{dependencies}{character vector of dependency types to include.
     Choices are "Depends", "Imports", "LinkingTo", "Suggests",
     and "Enhances".  Defaults to \code{c("Depends", "Imports",

@@ -381,19 +381,29 @@ $(document).ready(function () {
 <div id="dockr" class="section level1">
 <h1>dockr</h1>
 <p><code>dockr</code> 0.8.0 is now available on CRAN. <code>dockr</code> is a minimal toolkit to build a lightweight Docker image from your R package, in which the package itself is installed and available. The image seeks to mirror your R session as close as possible with respect to R specific dependencies.</p>
+<p>If you want to know, how Docker works, and why you should consider using Docker, please take a look at the <a href="https://www.docker.com/why-docker">Docker website</a>.</p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
 <p>Install the development version of <code>dockr</code> with:</p>
 <pre class="r"><code>remotes::install_github(&quot;smaakage85/dockr&quot;)</code></pre>
 <p>Or install the version released on CRAN:</p>
 <pre class="r"><code>install.packages(&quot;dockr&quot;)</code></pre>
-<pre class="r"><code>library(dockr)</code></pre>
 </div>
 <div id="workflow" class="section level2">
 <h2>Workflow</h2>
-<p>When you work on an R project, it is often desirable to organize the code in an R package. <code>dockr</code> prepares a Docker container image that mirrors your R session and includes all of the R dependencies needed to run your R package.</p>
-<pre class="r"><code>options(repos = c(CRAN = &quot;https://cran.rstudio.com/&quot;))
-prepare_docker_image()
+<p>When you work on an R project, it is often desirable to organize the code in an R package. <code>dockr</code> facilitates easy creation of a Docker container image that mirrors your R session and includes all of the R dependencies needed to run your R package.</p>
+<p>Load the <code>dockr</code> package.</p>
+<pre class="r"><code># load dockr.
+library(dockr)</code></pre>
+<p>In order do create the files for the Docker image simply invoke the <code>prepare_docker_image()</code> function and point to the folder with your package. The workflow of <code>prepare_docker_image()</code> is summarized below:</p>
+<ol style="list-style-type: decimal">
+<li>Build and install the package on your system (just like <code>devtools::build()</code>)</li>
+<li>Identify R package dependencies of the package</li>
+<li>Detect the version numbers of the loaded and installed versions of these packages on your system</li>
+<li>Write Dockerfile and create all other files for the Docker image</li>
+</ol>
+<p>Now, I will let <code>dockr</code> do its magic and create the files for a Docker image container, in which <code>dockr</code> is installed together with all of the package dependencies, <code>dockr</code> needs to run.</p>
+<pre class="r"><code>image &lt;- prepare_docker_image(&quot;.&quot;)
 #&gt; &lt;U+203C&gt; Folder: C:/Users/Lars/Documents/dockr_0.8.0 already exists and is non-empty. Proceed with care!
 #&gt; v Deleting existing folder for source packages: C:/Users/Lars/Documents/dockr_0.8.0/source_packages
 #&gt; v Creating folder for source packages: C:/Users/Lars/Documents/dockr_0.8.0/source_packages
@@ -419,72 +429,164 @@ prepare_docker_image()
 #&gt; - in Shell : 
 #&gt; =&gt; to build Docker image run:
 #&gt; cd C:/Users/Lars/Documents/dockr_0.8.0 
-#&gt; docker build -t dockr_0.8.0 .
-#&gt; $paths
-#&gt; $paths$dir_image
-#&gt; [1] &quot;C:/Users/Lars/Documents/dockr_0.8.0&quot;
+#&gt; docker build -t dockr_0.8.0 .</code></pre>
+<p>Great, all necessary files for the Docker image have been created, and you can build the Docker image right away by following the instructions. It is as easy as that! Yeah!</p>
+</div>
+<div id="files-for-docker-image" class="section level2">
+<h2>Files for Docker image</h2>
+<p>Let us just take a quick look into the folder with the files for the Docker image and see the works of <code>dockr</code>.</p>
+<pre class="r"><code>list.files(image$paths$dir_image)
+#&gt; [1] &quot;Dockerfile&quot;      &quot;source_packages&quot;</code></pre>
+<p>It contains a Dockerfile and a folder named ‘source_packages’.</p>
+<div id="dockerfile" class="section level3">
+<h3>Dockerfile</h3>
+<p>The resulting Dockerfile can be printed with the <code>print_file()</code> function:</p>
+<pre class="r"><code>print_file(image$paths$path_Dockerfile)
+#&gt; # load rocker base-R image
+#&gt; FROM rocker/r-ver:3.6.0
 #&gt; 
-#&gt; $paths$path_Dockerfile
-#&gt; [1] &quot;C:/Users/Lars/Documents/dockr_0.8.0/Dockerfile&quot;
+#&gt; # install specific versions of CRAN packages from MRAN snapshots
+#&gt; RUN R -e &#39;install.packages(&quot;remotes&quot;)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;askpass&quot;, &quot;1.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;assertthat&quot;, &quot;0.2.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;backports&quot;, &quot;1.1.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;cli&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;clipr&quot;, &quot;0.6.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;clisymbols&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;crayon&quot;, &quot;1.3.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;curl&quot;, &quot;3.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;desc&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;devtools&quot;, &quot;2.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;fs&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;gh&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;glue&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;gtools&quot;, &quot;3.8.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;httr&quot;, &quot;1.4.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;ini&quot;, &quot;0.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;jsonlite&quot;, &quot;1.6&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;magrittr&quot;, &quot;1.5&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;memoise&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pbapply&quot;, &quot;1.4-0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pkgbuild&quot;, &quot;1.0.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pkgload&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;prettyunits&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;ps&quot;, &quot;1.3.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;purrr&quot;, &quot;0.3.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;R6&quot;, &quot;2.4.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rcmdcheck&quot;, &quot;1.3.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;Rcpp&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rprojroot&quot;, &quot;1.3-2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rstudioapi&quot;, &quot;0.10&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;sessioninfo&quot;, &quot;1.1.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;sys&quot;, &quot;3.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;whisker&quot;, &quot;0.3-2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;withr&quot;, &quot;2.1.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;xopen&quot;, &quot;1.0.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;yaml&quot;, &quot;2.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;git2r&quot;, &quot;0.25.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;mime&quot;, &quot;0.6&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;openssl&quot;, &quot;1.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;remotes&quot;, &quot;2.0.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rlang&quot;, &quot;0.3.4&quot;, dependencies = FALSE)&#39;
 #&gt; 
-#&gt; $paths$dir_source_packages
-#&gt; [1] &quot;C:/Users/Lars/Documents/dockr_0.8.0/source_packages&quot;
+#&gt; # copy source_packages to container (*.tar.gz)
+#&gt; COPY source_packages /source_packages
 #&gt; 
-#&gt; $paths$pkgname_pkgvrs
-#&gt; [1] &quot;dockr_0.8.0&quot;
+#&gt; # install &#39;dockr&#39; package
+#&gt; RUN R -e &#39;install.packages(pkgs = &quot;source_packages/dockr_0.8.0.tar.gz&quot;, repos = NULL)&#39;
+#&gt; </code></pre>
+</div>
+<div id="folder-with-source-packages" class="section level3">
+<h3>Folder with Source Packages</h3>
+<p>The ‘source_packages’ folder contains the local (non-CRAN) packages, that have to be installed in the Docker image container in order for <code>dockr</code> to run.</p>
+<p>Since <code>dockr</code> does not depend on any local (non-CRAN) <code>source_packages</code> only contains a source package version of <code>dockr</code> itself, i.e.:</p>
+<pre class="r"><code>list.files(image$paths$dir_source_packages)
+#&gt; [1] &quot;dockr_0.8.0.tar.gz&quot;</code></pre>
+</div>
+</div>
+<div id="how-to-edit-dockerfile" class="section level2">
+<h2>How to edit Dockerfile</h2>
+<p>If there is need for adding additional lines to the Dockerfile, this can be achieved with the <code>write_lines_to_file()</code> function. <code>write_lines_to_file</code> enables you to add new lines to the beginning or the end of the Dockerfile.</p>
+<p>Let us try it out and write a couple of additional lines to the Dockerfile.</p>
+<pre class="r"><code># write lines to beginning of file.
+write_lines_to_file(c(&quot;# set maintainer&quot;,
+                    &quot;MAINTAINER Lars KJELDGAARD &lt;lars_kjeldgaard@hotmail.com&gt;&quot;, 
+                    &quot;&quot;),
+                    image$paths$path_Dockerfile,
+                    prepend = TRUE,
+                    print_file = FALSE)
+
+# write lines to beginning of file.
+write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;, &quot;smaakage&quot;),
+                    image$paths$path_Dockerfile,
+                    prepend = FALSE,
+                    print_file = TRUE)
+#&gt; # set maintainer
+#&gt; MAINTAINER Lars KJELDGAARD &lt;lars_kjeldgaard@hotmail.com&gt;
 #&gt; 
+#&gt; # load rocker base-R image
+#&gt; FROM rocker/r-ver:3.6.0
 #&gt; 
-#&gt; $deps_cran
-#&gt;             pkg    vrs  source
-#&gt; 1       askpass    1.1 present
-#&gt; 2    assertthat  0.2.1 present
-#&gt; 3     backports  1.1.4 present
-#&gt; 4         callr  3.2.0 present
-#&gt; 5           cli  1.1.0 present
-#&gt; 6         clipr  0.6.0 present
-#&gt; 7    clisymbols  1.2.0 present
-#&gt; 8        crayon  1.3.4 present
-#&gt; 9          curl    3.3 present
-#&gt; 10         desc  1.2.0 present
-#&gt; 11     devtools  2.0.2 present
-#&gt; 12       digest 0.6.19 present
-#&gt; 13           fs  1.3.1 present
-#&gt; 14           gh  1.0.1 present
-#&gt; 15         glue  1.3.1 present
-#&gt; 16       gtools  3.8.1 present
-#&gt; 17         httr  1.4.0 present
-#&gt; 18          ini  0.3.1 present
-#&gt; 19     jsonlite    1.6 present
-#&gt; 20     magrittr    1.5 present
-#&gt; 21      memoise  1.1.0 present
-#&gt; 22      pbapply  1.4-0 present
-#&gt; 23     pkgbuild  1.0.3 present
-#&gt; 24      pkgload  1.0.2 present
-#&gt; 25  prettyunits  1.0.2 present
-#&gt; 26     processx  3.3.1 present
-#&gt; 27           ps  1.3.0 present
-#&gt; 28        purrr  0.3.2 present
-#&gt; 29           R6  2.4.0 present
-#&gt; 30    rcmdcheck  1.3.3 present
-#&gt; 31         Rcpp  1.0.1 present
-#&gt; 32    rprojroot  1.3-2 present
-#&gt; 33   rstudioapi   0.10 present
-#&gt; 34  sessioninfo  1.1.1 present
-#&gt; 35          sys    3.2 present
-#&gt; 36      usethis  1.5.0 present
-#&gt; 37      whisker  0.3-2 present
-#&gt; 38        withr  2.1.2 present
-#&gt; 39        xopen  1.0.0 present
-#&gt; 40         yaml  2.2.0 present
-#&gt; 151       git2r 0.25.2 archive
-#&gt; 231        mime    0.6 archive
-#&gt; 241     openssl    1.3 archive
-#&gt; 351     remotes  2.0.4 archive
-#&gt; 361       rlang  0.3.4 archive
+#&gt; # install specific versions of CRAN packages from MRAN snapshots
+#&gt; RUN R -e &#39;install.packages(&quot;remotes&quot;)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;askpass&quot;, &quot;1.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;assertthat&quot;, &quot;0.2.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;backports&quot;, &quot;1.1.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;cli&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;clipr&quot;, &quot;0.6.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;clisymbols&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;crayon&quot;, &quot;1.3.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;curl&quot;, &quot;3.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;desc&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;devtools&quot;, &quot;2.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;fs&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;gh&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;glue&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;gtools&quot;, &quot;3.8.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;httr&quot;, &quot;1.4.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;ini&quot;, &quot;0.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;jsonlite&quot;, &quot;1.6&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;magrittr&quot;, &quot;1.5&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;memoise&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pbapply&quot;, &quot;1.4-0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pkgbuild&quot;, &quot;1.0.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;pkgload&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;prettyunits&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;ps&quot;, &quot;1.3.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;purrr&quot;, &quot;0.3.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;R6&quot;, &quot;2.4.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rcmdcheck&quot;, &quot;1.3.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;Rcpp&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rprojroot&quot;, &quot;1.3-2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rstudioapi&quot;, &quot;0.10&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;sessioninfo&quot;, &quot;1.1.1&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;sys&quot;, &quot;3.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;whisker&quot;, &quot;0.3-2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;withr&quot;, &quot;2.1.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;xopen&quot;, &quot;1.0.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;yaml&quot;, &quot;2.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;git2r&quot;, &quot;0.25.2&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;mime&quot;, &quot;0.6&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;openssl&quot;, &quot;1.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;remotes&quot;, &quot;2.0.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;rlang&quot;, &quot;0.3.4&quot;, dependencies = FALSE)&#39;
 #&gt; 
-#&gt; $deps_local
-#&gt; [1] pkg    vrs    source
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+#&gt; # copy source_packages to container (*.tar.gz)
+#&gt; COPY source_packages /source_packages
+#&gt; 
+#&gt; # install &#39;dockr&#39; package
+#&gt; RUN R -e &#39;install.packages(pkgs = &quot;source_packages/dockr_0.8.0.tar.gz&quot;, repos = NULL)&#39;
+#&gt; 
+#&gt; # check out smaakage85.netlify.com &gt;:-]~~
+#&gt; smaakage</code></pre>
 </div>
 </div>
 

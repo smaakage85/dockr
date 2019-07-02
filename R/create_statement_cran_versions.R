@@ -21,7 +21,7 @@ create_statement_cran_versions <- function(deps, verbose = TRUE) {
                       USE.NAMES = FALSE, SIMPLIFY = TRUE)
 
   # combine into one statement.
-  statement <- c("# install specific versions of packages from CRAN",
+  statement <- c("# install specific versions of CRAN packages from MRAN snapshots",
                  "RUN R -e 'install.packages(\"remotes\")'",
                  statement,
                  "")
