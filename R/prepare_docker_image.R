@@ -105,7 +105,7 @@ prepare_docker_image <- function(pkg = ".",
 
   # create copy to container statement.
   copy_to_container_statement <- c(
-    "# copy source_packages to container (*.tar.gz)",
+    "# copy source packages to container (*.tar.gz)",
     "COPY source_packages /source_packages",
     ""
     )

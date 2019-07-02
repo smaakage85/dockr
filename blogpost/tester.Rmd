@@ -1,5 +1,5 @@
 ---
-title: "dockr hits CRAN"
+title: "'dockr' hits CRAN"
 output:
   html_document: default
   pdf_document: default
@@ -20,7 +20,9 @@ knitr::opts_chunk$set(
 `dockr` 0.8.0 is now available on CRAN. `dockr` is a minimal toolkit to build a 
 lightweight Docker image from your R package, in which the package itself is 
 installed and available. The image seeks to mirror your R session as close as 
-possible with respect to R specific dependencies.
+possible with respect to R specific dependencies. Both dependencies on CRAN 
+packages as well as local non-CRAN packages are included in the Docker 
+container image.
 
 If you want to know, how Docker works, and why you should consider using Docker,
 please take a look at the [Docker website](https://www.docker.com/why-docker).
@@ -72,7 +74,7 @@ container, in which `dockr` is installed together with all of the package
 dependencies, `dockr` needs to run.
 
 ```{r, warning = FALSE, message = FALSE}
-image <- prepare_docker_image(".")
+image_dockr <- prepare_docker_image(".")
 ```
 
 Great, all necessary files for the Docker image have been created, and you 
@@ -85,7 +87,7 @@ Let us just take a quick look into the folder with the files for the Docker
 image and see the works of `dockr`.
 
 ```{r}
-list.files(image$paths$dir_image)
+list.files(image_dockr$paths$dir_image)
 ```
 
 It contains a Dockerfile and a folder named 'source_packages'.
@@ -95,7 +97,7 @@ It contains a Dockerfile and a folder named 'source_packages'.
 The resulting Dockerfile can be printed with the `print_file()` function:
 
 ```{r}
-print_file(image$paths$path_Dockerfile)
+print_file(image_dockr$paths$path_Dockerfile)
 ```
 
 ### Folder with Source Packages
@@ -107,32 +109,73 @@ Since `dockr` does not depend on any local (non-CRAN) `source_packages` only
 contains a source package version of `dockr` itself, i.e.:
 
 ```{r}
-list.files(image$paths$dir_source_packages)
+list.files(image_dockr$paths$dir_source_packages)
 ```
 
-## How to edit Dockerfile
+## How to edit Dockerfile further
 
-If there is need for adding additional lines to the Dockerfile, this can be 
-achieved with the `write_lines_to_file()` function. `write_lines_to_file` 
+If there is need for adding additional lines to/editing the Dockerfile (e.g.
+if you have to install any non-R [dependencies](#nonr), this can 
+be achieved with the `write_lines_to_file()` function. `write_lines_to_file()` 
 enables you to add new lines to the beginning or the end of the Dockerfile. 
 
 Let us try it out and write a couple of additional lines to the Dockerfile.
 
 ```{r}
-# write lines to beginning of file.
+# write three lines to beginning of file.
 write_lines_to_file(c("# set maintainer",
                     "MAINTAINER Lars KJELDGAARD <lars_kjeldgaard@hotmail.com>", 
                     ""),
-                    image$paths$path_Dockerfile,
+                    image_dockr$paths$path_Dockerfile,
                     prepend = TRUE,
                     print_file = FALSE)
 
-# write lines to beginning of file.
-write_lines_to_file(c("# check out smaakage85.netlify.com >:-]~~", "smaakage"),
-                    image$paths$path_Dockerfile,
+# write lines to the end of the file.
+write_lines_to_file(c("# check out smaakage85.netlify.com >:-]~~"),
+                    image_dockr$paths$path_Dockerfile,
                     prepend = FALSE,
-                    print_file = TRUE)
+                    print_file = FALSE)
 ```
+
+Take a look at the resulting Dockerfile.
+
+```{r}
+print_file(image_dockr$paths$path_Dockerfile)
+```
+
+## Dealing with local non-CRAN R package dependencies
+
+If your package depends on local non-CRAN R packages, `dockr` will also include
+these packages in the Docker container image. Local non-CRAN R packages must be
+available as source packages (**[packageName]_[packageVersion].tar.gz**) in one
+or more user specified local directories. These paths have to be specified in the
+'dir_src' argument, when invoking the `prepare_docker_image()`, e.g.: 
+
+```{r eval = FALSE}
+image_recorder <- prepare_docker_image("~/recorder",
+                                       dir_src = "~/src")
+```
+
+## What about non-R dependencies?
+
+`dockr` does _not_ deal with non-R dependencies at this point. In case that, 
+for instance, your package has any Linux specific dependencies, you 
+will have to install them yourself in the Docker container image. 
+
+## Contact
+
+I hope, that you will find `dockr` useful.
+
+Please direct any questions and feedbacks to [me](mailto:lars_kjeldgaard@hotmail.com)!
+
+If you want to contribute, open a [PR](https://github.com/smaakage85/dockerfiler/pulls).
+
+If you encounter a bug or want to suggest an enhancement, please [open an issue](https://github.com/smaakage85/dockr/issues).
+
+Hang loose,
+smaakagen
+
+
 
 
 
