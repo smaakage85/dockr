@@ -4,26 +4,27 @@
 #' dependency packages, (2) looking up, what versions of these packages that
 #' are presently loaded or, subsidiarily, installed, (3) linking these specific
 #' dependencies to the right repositories and finally (4) creating all of the
-#' necessary files the Docker image - including the Dockerfile.
+#' necessary files the Docker image - including a Dockerfile.
 #'
 #' @param verbose \code{logical} should messages be printed or not?
-#' @param directory \code{character} directory where the files for the Docker
-#' image are put, and from where the Docker image can be build.
+#' @param directory \code{character} directory where all files for the Docker
+#' image are saved, and from where the Docker image can be build.
 #' @param print_dockerfile \code{logical} should the resulting Dockerfile be
 #' printed?
-#' @param r_version \code{character} which version of R should the Docker image
-#' run in, e.g. '3.6.0'. If set to NULL, the active version will apply.
+#' @param r_version \code{character} which version of R to include in the 
+#' Docker image, e.g. '3.6.0'. Defaults to NULL, which implies that the active 
+#' version of R will apply.
 #' @param dir_src \code{character} directories with local source packages. Put
 #' directories in prioritized order. The first directory will have the highest
 #' priority.
-#' @param prioritize_cran \code{logical} should dependencies matched with
-#' CRAN be prioritized over matches with local source packages.
+#' @param prioritize_cran \code{logical} should R dependency packages matched
+#' with CRAN be prioritized over matches with local source packages.
 #'
 #' @inheritParams gtools::getDependencies
 #' @inheritParams devtools::build
 #'
 #' @return \code{list} relevant meta data of the files, that constitute
-#' the Docker image. As a side effect the files for the Docker image -
+#' the Docker image. As a side effect all necessary files for the Docker image -
 #' including the resulting Dockerfile - are saved in the desired directory.
 #'
 #' @export
@@ -40,7 +41,7 @@ prepare_docker_image <- function(pkg = ".",
                                  dir_src = NULL,
                                  prioritize_cran = TRUE) {
 
-  # prep docker folders and files.
+  # setup directory for Docker image.
   paths <- setup_dir_image(pkg = pkg,
                            directory = directory,
                            verbose = verbose)

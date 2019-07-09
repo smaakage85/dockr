@@ -380,7 +380,7 @@ $(document).ready(function () {
 
 <div id="dockr" class="section level1">
 <h1>dockr</h1>
-<p><code>dockr</code> 0.8.0 is now available on CRAN. <code>dockr</code> is a minimal toolkit to build a lightweight Docker image from your R package, in which the package itself is installed and available. The image seeks to mirror your R session as close as possible with respect to R specific dependencies. Both dependencies on CRAN packages as well as local non-CRAN packages are included in the Docker container image.</p>
+<p><code>dockr</code> 0.8.0 is now available on CRAN. <code>dockr</code> is a minimal toolkit to build a lightweight Docker container image for your R package, in which the package itself is available. The Docker image seeks to mirror your R session as close as possible with respect to R specific dependencies. Both dependencies on CRAN R packages as well as local non-CRAN R packages will be included in the Docker container image.</p>
 <p>If you want to know, how Docker works, and why you should consider using Docker, please take a look at the <a href="https://www.docker.com/why-docker">Docker website</a>.</p>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
@@ -391,18 +391,19 @@ $(document).ready(function () {
 </div>
 <div id="workflow" class="section level2">
 <h2>Workflow</h2>
-<p>When you work on an R project, it is often desirable to organize the code in an R package. <code>dockr</code> facilitates easy creation of a Docker container image that mirrors your R session and includes all of the R dependencies needed to run your R package.</p>
-<p>Load the <code>dockr</code> package.</p>
-<pre class="r"><code># load dockr.
-library(dockr)</code></pre>
-<p>In order do create the files for the Docker image simply invoke the <code>prepare_docker_image()</code> function and point to the folder with your package. The workflow of <code>prepare_docker_image()</code> is summarized below:</p>
+<p>When you work on an R project, it is often desirable to organize the code in the R package structure. <code>dockr</code> facilitates easy creation of a Docker container image that mirrors your R session and includes all of the R dependencies needed to run your R package.</p>
+<p>First, load the <code>dockr</code> package.</p>
+<pre class="r"><code>library(dockr)</code></pre>
+<p>In order do create the files, that constitute the Docker image, simply invoke the <code>prepare_docker_image()</code> function and point to the folder with your package.</p>
+<p>The workflow of <code>prepare_docker_image()</code> is summarized below:</p>
 <ol style="list-style-type: decimal">
-<li>Build and install the package on your system (just like <code>devtools::build()</code>)</li>
+<li>Build and install the package on your system</li>
 <li>Identify R package dependencies of the package</li>
 <li>Detect the version numbers of the loaded and installed versions of these packages on your system</li>
-<li>Write Dockerfile and create all other files for the Docker image</li>
+<li>Write Dockerfile and create all other files needed for the Docker image</li>
 </ol>
-<p>Now, I will let <code>dockr</code> do its magic and create the files for a Docker image container, in which <code>dockr</code> is installed together with all of the package dependencies, <code>dockr</code> needs to run.</p>
+<p>Now, I will let <code>dockr</code> do its magic and create the files for a Docker image container, in which <code>dockr</code> is installed together with all of the R package dependencies, <code>dockr</code> needs to run.</p>
+<p>Beware that the files are created as side-effects of the function call.</p>
 <pre class="r"><code>image_dockr &lt;- prepare_docker_image(&quot;.&quot;)
 #&gt; &lt;U+203C&gt; Folder: C:/Users/Lars/Documents/dockr_0.8.0 already exists and is non-empty. Proceed with care!
 #&gt; v Deleting existing folder for source packages: C:/Users/Lars/Documents/dockr_0.8.0/source_packages
@@ -434,13 +435,13 @@ library(dockr)</code></pre>
 </div>
 <div id="files-for-docker-image" class="section level2">
 <h2>Files for Docker image</h2>
-<p>Let us just take a quick look into the folder with the files for the Docker image and see the works of <code>dockr</code>.</p>
+<p>Let us just take a quick look into the folder with the files for the Docker image to see the works of <code>dockr</code>.</p>
 <pre class="r"><code>list.files(image_dockr$paths$dir_image)
 #&gt; [1] &quot;Dockerfile&quot;      &quot;source_packages&quot;</code></pre>
 <p>It contains a Dockerfile and a folder named ‘source_packages’.</p>
 <div id="dockerfile" class="section level3">
 <h3>Dockerfile</h3>
-<p>The resulting Dockerfile can be printed with the <code>print_file()</code> function:</p>
+<p>The resulting Dockerfile can be printed with the <code>print_file()</code> function, that comes with <code>dockr</code>:</p>
 <pre class="r"><code>print_file(image_dockr$paths$path_Dockerfile)
 #&gt; # load rocker base-R image
 #&gt; FROM rocker/r-ver:3.6.0
@@ -450,7 +451,6 @@ library(dockr)</code></pre>
 #&gt; RUN R -e &#39;remotes::install_version(&quot;askpass&quot;, &quot;1.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;assertthat&quot;, &quot;0.2.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;backports&quot;, &quot;1.1.4&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;cli&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;clipr&quot;, &quot;0.6.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;clisymbols&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
@@ -458,7 +458,6 @@ library(dockr)</code></pre>
 #&gt; RUN R -e &#39;remotes::install_version(&quot;curl&quot;, &quot;3.3&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;desc&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;devtools&quot;, &quot;2.0.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;fs&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;gh&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;glue&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
@@ -472,7 +471,6 @@ library(dockr)</code></pre>
 #&gt; RUN R -e &#39;remotes::install_version(&quot;pkgbuild&quot;, &quot;1.0.3&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;pkgload&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;prettyunits&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;ps&quot;, &quot;1.3.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;purrr&quot;, &quot;0.3.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;R6&quot;, &quot;2.4.0&quot;, dependencies = FALSE)&#39;
@@ -482,16 +480,19 @@ library(dockr)</code></pre>
 #&gt; RUN R -e &#39;remotes::install_version(&quot;rstudioapi&quot;, &quot;0.10&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;sessioninfo&quot;, &quot;1.1.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;sys&quot;, &quot;3.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;whisker&quot;, &quot;0.3-2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;withr&quot;, &quot;2.1.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;xopen&quot;, &quot;1.0.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;yaml&quot;, &quot;2.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;git2r&quot;, &quot;0.25.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;mime&quot;, &quot;0.6&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;openssl&quot;, &quot;1.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;remotes&quot;, &quot;2.0.4&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;rlang&quot;, &quot;0.3.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
 #&gt; 
 #&gt; # copy source packages to container (*.tar.gz)
 #&gt; COPY source_packages /source_packages
@@ -499,11 +500,13 @@ library(dockr)</code></pre>
 #&gt; # install &#39;dockr&#39; package
 #&gt; RUN R -e &#39;install.packages(pkgs = &quot;source_packages/dockr_0.8.0.tar.gz&quot;, repos = NULL)&#39;
 #&gt; </code></pre>
+<p>As you see, the versions of the R packages, that will be installed in the Docker container image, are all given explicitly. They will mirror the versions of the dependencies, that are in fact loaded or installed on your system. In this way, the Docker container image seeks to reflect your current R session as close as possible and by doing so create an environment, where you will be able to reproduce results from your current R session.</p>
+<p>Also note, that CRAN R packages will be installed from relevant <a href="https://mran.microsoft.com/">MRAN snapshots</a> - using the <code>remotes::install_version()</code> function.</p>
 </div>
 <div id="folder-with-source-packages" class="section level3">
 <h3>Folder with Source Packages</h3>
 <p>The ‘source_packages’ folder contains the local (non-CRAN) packages, that have to be installed in the Docker image container in order for <code>dockr</code> to run.</p>
-<p>Since <code>dockr</code> does not depend on any local (non-CRAN) <code>source_packages</code> only contains a source package version of <code>dockr</code> itself, i.e.:</p>
+<p>Since <code>dockr</code> does not depend on any local (non-CRAN) packages, <code>source_packages</code> only contains a source package version of <code>dockr</code> itself, i.e.:</p>
 <pre class="r"><code>list.files(image_dockr$paths$dir_source_packages)
 #&gt; [1] &quot;dockr_0.8.0.tar.gz&quot;</code></pre>
 </div>
@@ -538,7 +541,6 @@ write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;),
 #&gt; RUN R -e &#39;remotes::install_version(&quot;askpass&quot;, &quot;1.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;assertthat&quot;, &quot;0.2.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;backports&quot;, &quot;1.1.4&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;cli&quot;, &quot;1.1.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;clipr&quot;, &quot;0.6.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;clisymbols&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
@@ -546,7 +548,6 @@ write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;),
 #&gt; RUN R -e &#39;remotes::install_version(&quot;curl&quot;, &quot;3.3&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;desc&quot;, &quot;1.2.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;devtools&quot;, &quot;2.0.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;fs&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;gh&quot;, &quot;1.0.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;glue&quot;, &quot;1.3.1&quot;, dependencies = FALSE)&#39;
@@ -560,7 +561,6 @@ write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;),
 #&gt; RUN R -e &#39;remotes::install_version(&quot;pkgbuild&quot;, &quot;1.0.3&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;pkgload&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;prettyunits&quot;, &quot;1.0.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;ps&quot;, &quot;1.3.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;purrr&quot;, &quot;0.3.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;R6&quot;, &quot;2.4.0&quot;, dependencies = FALSE)&#39;
@@ -570,16 +570,19 @@ write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;),
 #&gt; RUN R -e &#39;remotes::install_version(&quot;rstudioapi&quot;, &quot;0.10&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;sessioninfo&quot;, &quot;1.1.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;sys&quot;, &quot;3.2&quot;, dependencies = FALSE)&#39;
-#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;whisker&quot;, &quot;0.3-2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;withr&quot;, &quot;2.1.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;xopen&quot;, &quot;1.0.0&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;yaml&quot;, &quot;2.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;callr&quot;, &quot;3.2.0&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;digest&quot;, &quot;0.6.19&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;git2r&quot;, &quot;0.25.2&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;mime&quot;, &quot;0.6&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;openssl&quot;, &quot;1.3&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;processx&quot;, &quot;3.3.1&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;remotes&quot;, &quot;2.0.4&quot;, dependencies = FALSE)&#39;
 #&gt; RUN R -e &#39;remotes::install_version(&quot;rlang&quot;, &quot;0.3.4&quot;, dependencies = FALSE)&#39;
+#&gt; RUN R -e &#39;remotes::install_version(&quot;usethis&quot;, &quot;1.5.0&quot;, dependencies = FALSE)&#39;
 #&gt; 
 #&gt; # copy source packages to container (*.tar.gz)
 #&gt; COPY source_packages /source_packages
@@ -591,21 +594,22 @@ write_lines_to_file(c(&quot;# check out smaakage85.netlify.com &gt;:-]~~&quot;),
 </div>
 <div id="dealing-with-local-non-cran-r-package-dependencies" class="section level2">
 <h2>Dealing with local non-CRAN R package dependencies</h2>
-<p>If your package depends on local non-CRAN R packages, <code>dockr</code> will also include these packages in the Docker container image. Local non-CRAN R packages must be available as source packages (**[packageName]_[packageVersion].tar.gz**) in one or more user specified local directories. These paths have to be specified in the ‘dir_src’ argument, when invoking the <code>prepare_docker_image()</code>, e.g.:</p>
-<pre class="r"><code>image_recorder &lt;- prepare_docker_image(&quot;~/recorder&quot;,
+<p>If your package depends on local non-CRAN R packages, <code>dockr</code> will also include these packages in the Docker container image. Local non-CRAN R packages must be available as source packages (*[packageName]_[packageVersion].tar.gz*) in one or more user specified local directories. These paths have to be specified in the ‘dir_src’ argument, when invoking the <code>prepare_docker_image()</code>, e.g.:</p>
+<pre class="r"><code># image for my package &#39;recorder&#39;.
+image_recorder &lt;- prepare_docker_image(&quot;~/recorder&quot;,
                                        dir_src = &quot;~/src&quot;)</code></pre>
 </div>
 <div id="what-about-non-r-dependencies" class="section level2">
 <h2>What about non-R dependencies?</h2>
-<p><code>dockr</code> does <em>not</em> deal with non-R dependencies at this point. In case that, for instance, your package has any Linux specific dependencies, you will have to install them yourself in the Docker container image.</p>
+<p><code>dockr</code> does <em>not</em> deal with any non-R dependencies what so ever at this point. In case that, for instance, your package has any Linux specific dependencies, you will have to install them yourself in the Docker container image.</p>
 </div>
 <div id="contact" class="section level2">
 <h2>Contact</h2>
 <p>I hope, that you will find <code>dockr</code> useful.</p>
 <p>Please direct any questions and feedbacks to <a href="mailto:lars_kjeldgaard@hotmail.com">me</a>!</p>
-<p>If you want to contribute, open a <a href="https://github.com/smaakage85/dockerfiler/pulls">PR</a>.</p>
+<p>If you want to contribute, open a <a href="https://github.com/smaakage85/dockr/pulls">PR</a>.</p>
 <p>If you encounter a bug or want to suggest an enhancement, please <a href="https://github.com/smaakage85/dockr/issues">open an issue</a>.</p>
-<p>Hang loose, smaakagen</p>
+<p>Best, smaakagen</p>
 </div>
 </div>
 

@@ -1,6 +1,6 @@
 #' Setup Directory for Docker Image
 #'
-#' Prepares the desired directory with the appropriate file structure for the
+#' Sets up the desired directory with the appropriate file structure for the
 #' Docker image and an empty Dockerfile.
 #'
 #' @inheritParams prepare_docker_image
@@ -15,7 +15,8 @@ setup_dir_image <- function(pkg = ".",
                             directory = NULL,
                             verbose = FALSE) {
 
-  # expand directory.
+  # set root directory to path of package, if it has not been provided by the 
+  # user.
   if (is.null(directory)) {
     directory <- dirname(pkg_path(path = pkg))
   }

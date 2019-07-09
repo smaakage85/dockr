@@ -11,7 +11,7 @@ build_and_install_package(pkg = ".", dir_source_packages,
 \item{pkg}{Path to a package, or within a package.}
 
 \item{dir_source_packages}{\code{character} directory containing local
-source packages, that will be built into the Docker image.}
+source packages, that will be included in the Docker container image.}
 
 \item{pkgname_pkgversion}{\code{character} the package name concatenated
 with the version number of the package.}
@@ -19,11 +19,11 @@ with the version number of the package.}
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-the package is built, install and loaded as side effects.
+invisibly. The package is built, installed and loaded as side effects.
 Furthermore the source package is saved in the folder containing the files
 for the Docker image.
 }
 \description{
-Builds, installs and load the package. As a side effect the source package
-is built and saved into the directory with the Docker files.
+Builds, installs and loads the package. As a side effect the source package
+is built and saved in the directory with the files for the Docker image.
 }

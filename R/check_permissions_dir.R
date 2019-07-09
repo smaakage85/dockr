@@ -6,13 +6,14 @@
 #' @param directory \code{character} directory to examine.
 #' @param existence \code{logical} does directory exist?
 #' @param execute \code{logical} does user have execute permissions for
-#' directory.
+#' directory?
 #' @param write \code{logical} does user have write permissions for
-#' directory.
+#' directory?
 #' @param read \code{logical} does user have read permissions for
-#' directory.
+#' directory?
 #'
-#' @return \code{logical} TRUE if user has all the specific permissions.
+#' @return \code{logical} TRUE if user has all the specific permissions, 
+#' otherwise FALSE.
 check_permissions_dir <- function(directory,
                                   existence = TRUE,
                                   execute = TRUE,
