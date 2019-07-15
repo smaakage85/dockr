@@ -22,7 +22,7 @@ match_pkg_cran <- function(pkgs_df,
   ap <- available.packages()
   ap <- as.data.frame(ap)
   # subset only relevant columns.
-  ap <- ap[, c("Package", "Version")]
+  ap <- ap[, c("Package", "Version"), drop = FALSE]
   ap$source <- "present"
 
   # match with desired packages.
@@ -32,7 +32,7 @@ match_pkg_cran <- function(pkgs_df,
 
   # match any unmatched dependencies with archived R package versions.
   no_match <- merge(pkgs_df, match_ap, all.x = TRUE)
-  no_match <- no_match[is.na(no_match$source), c("pkg", "vrs")]
+  no_match <- no_match[is.na(no_match$source), c("pkg", "vrs"), drop = FALSE]
   match_archive <- match_pkg_archive(no_match)
 
   # bind results.
@@ -80,7 +80,7 @@ match_pkg_archive <- function(pkgs_df) {
   }
 
   # subset packages with matches.
-  pkgs_df <- pkgs_df[match_lgl, ]
+  pkgs_df <- pkgs_df[match_lgl, , drop = FALSE]
   pkgs_df$source <- "archive"
 
   pkgs_df

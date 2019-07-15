@@ -30,7 +30,7 @@ match_pkg_local <- function(pkgs_df = NULL,
 
   # if a package is found in more than one directory, use directory with
   # the highest priority.
-  match_deps <- match_deps[!duplicated(match_deps[, c("pkg", "vrs")]), ]
+  match_deps <- match_deps[!duplicated(match_deps[, c("pkg", "vrs")]), , drop = FALSE]
 
   # print service information.
   if (verbose) {
@@ -59,7 +59,7 @@ match_pkg_local_helper <- function(pkgs_df, dir_src) {
   pkgs_df$source <- dir_src
 
   # subset packages, that are found amongst the files.
-  pkgs_df <- pkgs_df[are_in_files, ]
+  pkgs_df <- pkgs_df[are_in_files, , drop = FALSE]
 
   pkgs_df
 

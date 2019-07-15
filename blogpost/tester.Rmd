@@ -67,7 +67,7 @@ The workflow of `prepare_docker_image()` is summarized below:
 2. Identify R package dependencies of the package
 3. Detect the version numbers of the loaded and installed versions of these 
 packages on your system
-4. Write Dockerfile and create all other files needed for the Docker image
+4. Write Dockerfile and create all other files needed to build the Docker image
 
 Now, I will let `dockr` do its magic and create the files for a Docker image
 container, in which `dockr` is installed together with all of the R package 

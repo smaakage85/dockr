@@ -12,14 +12,14 @@ print_end_service_information <- function(path_Dockerfile,
                                           dir_image,
                                           pkgname_pkgvrs) {
 
-  # R stuff
+  # R stuff.
   cat(silver("- in", blue("R"), silver(":"), "\n"))
   cat(silver("=> to inspect Dockerfile run:\n"))
   cat(cyan(paste0("dockr::print_file(\"", path_Dockerfile, "\")")), "\n")
   cat(silver("=> to edit Dockerfile run:\n"))
   cat(cyan(paste0("dockr::write_lines_to_file([lines], \"", path_Dockerfile, "\")")), "\n")
 
-  # Shell stuff
+  # Shell stuff.
   cat(silver("- in", yellow("Shell"), silver(":"), "\n"))
   cat(silver("=> to build Docker image run:\n"))
   cat(cyan(paste0("cd ", dir_image)), "\n")

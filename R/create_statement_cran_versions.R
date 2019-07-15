@@ -3,7 +3,7 @@
 #' @param deps \code{data.frame} dependency packages with version numbers.
 #' @inheritParams prepare_docker_image
 #'
-#' @return \code{character} statement for Dockerfile.
+#' @return \code{character} statement(s) for Dockerfile.
 create_statement_cran_versions <- function(deps, verbose = TRUE) {
 
   # handle case, when there are no CRAN deps.

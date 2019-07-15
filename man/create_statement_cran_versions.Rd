@@ -12,7 +12,7 @@ create_statement_cran_versions(deps, verbose = TRUE)
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-\code{character} statement for Dockerfile.
+\code{character} statement(s) for Dockerfile.
 }
 \description{
 Create Install CRAN Packages Statement for Dockerfile
