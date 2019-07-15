@@ -8,8 +8,6 @@
 #'
 #' @inheritParams prepare_docker_image
 #'
-#' @importFrom pkgload pkg_path
-#'
 #' @return \code{data.frame} with packages, their version numbers and the
 #' directory, where the source package was found.
 match_pkg_local <- function(pkgs_df = NULL,
@@ -57,7 +55,7 @@ match_pkg_local_helper <- function(pkgs_df, dir_src) {
   pkg_files <- paste0(pkgs_df$pkg, "_", pkgs_df$vrs, ".tar.gz")
   are_in_files <- which(pkg_files %in% files)
 
-  # set column with source.
+  # set column with source (directory).
   pkgs_df$source <- dir_src
 
   # subset packages, that are found amongst the files.
