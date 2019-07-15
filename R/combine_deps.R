@@ -26,7 +26,7 @@ combine_deps <- function(pkg_deps, deps_cran, deps_local, prioritize_cran = FALS
     stop("The following dependency packages were not found on CRAN or in local directories: \n",
          paste(pkg_no_match$pkg, pkg_no_match$vrs, sep = "_", collapse = ", "))
   }
-browser()
+
   # identify any overlap of packages between CRAN and local directories.
   pkg_overlap <- deps_cran[deps_cran$pkg %in% deps_local$pkg, c("pkg", "vrs")]
   if (!is.null(pkg_overlap) && nrow(pkg_overlap) != 0) {
