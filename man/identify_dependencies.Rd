@@ -2,7 +2,7 @@
 % Please edit documentation in R/identify_dependencies.R
 \name{identify_dependencies}
 \alias{identify_dependencies}
-\title{Identify Package Dependencies}
+\title{Identify R Package Dependencies of Package}
 \usage{
 identify_dependencies(pkg = pkg, dependencies = c("Depends", "Imports",
   "LinkingTo"), base = FALSE, recommended = FALSE, verbose = TRUE)
@@ -30,10 +30,10 @@ identify_dependencies(pkg = pkg, dependencies = c("Depends", "Imports",
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-\code{data.frame} all dependencies with version numbers of
+\code{data.frame} all R package dependencies with version numbers of
 the corresponding (1) loaded or (2) installed packages.
 }
 \description{
-Identifies the dependencies of a package and the version numbers of
+Identifies the R package dependencies of a package and the version numbers of
 the corresponding packages, that are currently loaded or installed.
 }

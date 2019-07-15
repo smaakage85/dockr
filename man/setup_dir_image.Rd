@@ -4,20 +4,25 @@
 \alias{setup_dir_image}
 \title{Setup Directory for Docker Image}
 \usage{
-setup_dir_image(pkg = ".", directory = NULL, verbose = FALSE)
+setup_dir_image(pkg = ".", directory = NULL, overwrite = TRUE,
+  verbose = FALSE)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
 
-\item{directory}{\code{character} directory where the files for the Docker
-image are put, and from where the Docker image can be build.}
+\item{directory}{\code{character} directory where all files for the Docker
+image are saved, and from where the Docker image can be build.}
+
+\item{overwrite}{\code{logical} if the directory for the files for the
+Docker image already exists and is non-empty, should it be 
+deleted/overwritten?}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-\code{list} directories and paths for Docker files.
+\code{list} directories and paths for files for Docker image.
 }
 \description{
-Prepares the desired directory with the appropriate file structure for the
+Sets up the desired directory with the appropriate file structure for the
 Docker image and an empty Dockerfile.
 }

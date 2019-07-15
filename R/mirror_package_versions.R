@@ -3,11 +3,12 @@
 #' Mirrors version numbers of specific packages. If a package is loaded, the
 #' version number of the loaded package is used. If a packages is not loaded but
 #' installed, the version number of the installed package will be extracted
-#' in sted.
+#' in stead.
 #'
 #' @param pkgs \code{character} names of packages.
 #'
-#' @return \code{data.frame} with packages and relevant version numbers.
+#' @return \code{data.frame} with package names and their relevant version 
+#' numbers.
 #'
 #' @importFrom utils sessionInfo installed.packages
 mirror_package_versions <- function(pkgs) {

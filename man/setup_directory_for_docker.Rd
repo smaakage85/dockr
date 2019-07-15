@@ -7,8 +7,8 @@
 setup_directory_for_docker(directory = NULL, verbose = FALSE)
 }
 \arguments{
-\item{directory}{\code{character} directory where the files for the Docker
-image are put, and from where the Docker image can be build.}
+\item{directory}{\code{character} directory where all files for the Docker
+image are saved, and from where the Docker image can be build.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }

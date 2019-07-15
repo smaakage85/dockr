@@ -1,7 +1,7 @@
 #' Create From Statement for Dockerfile
 #'
 #' Creates FROM statement for Dockerfile and sets it up with a relevant
-#' `rocker` image as a starting point.
+#' `rocker` base R image as a starting point.
 #'
 #' @inheritParams prepare_docker_image
 #'

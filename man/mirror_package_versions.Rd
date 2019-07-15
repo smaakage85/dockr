@@ -10,11 +10,12 @@ mirror_package_versions(pkgs)
 \item{pkgs}{\code{character} names of packages.}
 }
 \value{
-\code{data.frame} with packages and relevant version numbers.
+\code{data.frame} with package names and their relevant version 
+numbers.
 }
 \description{
 Mirrors version numbers of specific packages. If a package is loaded, the
 version number of the loaded package is used. If a packages is not loaded but
 installed, the version number of the installed package will be extracted
-in sted.
+in stead.
 }

@@ -2,8 +2,12 @@
 #'
 #' Match specific package versions with CRAN.
 #'
-#' @param pkgs_df \code{data.frame}
+#' @param pkgs_df \code{data.frame} with names of R packages "pkg" and their
+#' corresponding version numbers "vrs".
 #' @inheritParams prepare_docker_image
+#' 
+#' @return \code{data.frame} with package names (and versions) of dependency
+#' packages matched with CRAN repos.
 #'
 #' @importFrom utils available.packages contrib.url
 match_pkg_cran <- function(pkgs_df,
@@ -17,6 +21,7 @@ match_pkg_cran <- function(pkgs_df,
   # what package versions are available on CRAN presently?
   ap <- available.packages()
   ap <- as.data.frame(ap)
+  # subset only relevant columns.
   ap <- ap[, c("Package", "Version")]
   ap$source <- "present"
 
@@ -25,7 +30,7 @@ match_pkg_cran <- function(pkgs_df,
                     by.x = c("pkg", "vrs"),
                     by.y = c("Package", "Version"))
 
-  # match with archived versions.
+  # match any unmatched dependencies with archived R package versions.
   no_match <- merge(pkgs_df, match_ap, all.x = TRUE)
   no_match <- no_match[is.na(no_match$source), c("pkg", "vrs")]
   match_archive <- match_pkg_archive(no_match)
@@ -45,9 +50,19 @@ match_pkg_cran <- function(pkgs_df,
 
 }
 
+#' Match Archived Versions of CRAN Packages
+#' 
+#' Searches for a specific _archived_ version of an R package dependency
+#' on CRAN.
+#' 
+#' @inheritParams match_pkg_cran
+#'
+#' @return \code{data.frame} with package names (and versions) of dependency
+#' packages matched with CRAN repos.
 match_pkg_archive <- function(pkgs_df) {
 
-  # apply helper function to all packages.
+  # apply helper function to all packages, that checks if a specific archived
+  # version of a package exists.
   match_archive <- suppressWarnings(
     mapply(match_pkg_archive_helper,
            pkg = pkgs_df$pkg,
@@ -72,15 +87,13 @@ match_pkg_archive <- function(pkgs_df) {
 
 }
 
+# checks if a specific archived version of a package exists.
 match_pkg_archive_helper <- function(pkg, vrs) {
 
   # construct exact url to look for.
   url_archive <- paste0("https://cran.r-project.org/src/contrib/Archive/",
                         pkg, "/",
                         pkg, "_", vrs, ".tar.gz")
-
-
-  # ! HANDLE VERSION NUMBER x.x-3 etc.
 
   # try to establish connection to file (/check if file exists).
   tryCatch({

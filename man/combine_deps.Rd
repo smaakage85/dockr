@@ -16,8 +16,8 @@ CRAN.}
 \item{deps_local}{\code{data.frame} package dependencies matched with
 local source packages.}
 
-\item{prioritize_cran}{\code{logical} should dependencies matched with
-CRAN be prioritized over matches with local source packages.}
+\item{prioritize_cran}{\code{logical} should R dependency packages matched
+with CRAN be prioritized over matches with local source packages?}
 }
 \value{
 \code{list} prioritized dependencies split into CRAN dependencies

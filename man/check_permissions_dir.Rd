@@ -13,16 +13,17 @@ check_permissions_dir(directory, existence = TRUE, execute = TRUE,
 \item{existence}{\code{logical} does directory exist?}
 
 \item{execute}{\code{logical} does user have execute permissions for
-directory.}
+directory?}
 
 \item{write}{\code{logical} does user have write permissions for
-directory.}
+directory?}
 
 \item{read}{\code{logical} does user have read permissions for
-directory.}
+directory?}
 }
 \value{
-\code{logical} TRUE if user has all the specific permissions.
+\code{logical} TRUE if user has all the specific permissions, 
+otherwise FALSE.
 }
 \description{
 Checks if the user has one or more specific permissions for a given

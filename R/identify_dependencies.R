@@ -1,6 +1,6 @@
-#' Identify Package Dependencies
+#' Identify R Package Dependencies of Package
 #'
-#' Identifies the dependencies of a package and the version numbers of
+#' Identifies the R package dependencies of a package and the version numbers of
 #' the corresponding packages, that are currently loaded or installed.
 #'
 #' @inheritParams gtools::getDependencies
@@ -9,7 +9,7 @@
 #' @importFrom pkgload pkg_name
 #' @importFrom gtools getDependencies
 #'
-#' @return \code{data.frame} all dependencies with version numbers of
+#' @return \code{data.frame} all R package dependencies with version numbers of
 #' the corresponding (1) loaded or (2) installed packages.
 #'
 #' @importFrom gtools getDependencies
@@ -31,21 +31,22 @@ identify_dependencies <- function(pkg = pkg,
                           recommended = recommended)
 
   if (length(deps) == 0) {
-    message("No non-base dependencies detected.")
+    message("No R package dependencies detected. Docker container image will",
+            " be trivial.")
     return(NULL)
   }
 
-  # mirror loaded (and installed) version numbers of all dependency packages.
+  # mirror loaded (and installed) version numbers of all dependency R packages.
   loaded_deps <- mirror_package_versions(deps)
 
   # print service information.
   if (verbose) {
-    cat_bullet("Identifying package dependencies",
+    cat_bullet("Identifying and mirroring R package dependencies",
                bullet = "tick",
                bullet_col = "green")
   }
 
-  # return dependencies with version numbers.
+  # return R package dependencies with version numbers.
   loaded_deps
 
 }

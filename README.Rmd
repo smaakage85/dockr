@@ -12,8 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!-- # dockr <img src="man/figures/logo.png" align="right" height=140/> -->
-# dockr
+# dockr <img src="man/figures/dockr.png" align="right" height=140/>
 [![Travis-CI Build Status](https://travis-ci.org/smaakage85/dockr.svg?branch=master)](https://travis-ci.org/smaakage85/dockr)
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/dockr)](https://CRAN.R-project.org/package=dockr) [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/dockr)](https://CRAN.R-project.org/package=dockr)
 

@@ -6,13 +6,14 @@
 #' @inheritParams prepare_docker_image
 #' @inheritParams devtools::build
 #'
-#' @return \code{list} directories and paths for Docker files.
+#' @return \code{list} directories and paths for files for Docker image.
 #'
 #' @importFrom crayon blue yellow
 #' @importFrom cli cat_bullet
 #' @importFrom pkgload pkg_name pkg_version pkg_path
 setup_dir_image <- function(pkg = ".",
                             directory = NULL,
+                            overwrite = TRUE,
                             verbose = FALSE) {
 
   # set root directory to path of package, if it has not been provided by the 
@@ -30,10 +31,17 @@ setup_dir_image <- function(pkg = ".",
 
   # check if folder for Docker files is non-empty.
   if (length(list.files(dir_image)) > 0) {
-    if (verbose) {
-      cat_bullet("Folder: ", blue(dir_image), " already exists and is non-empty. ", yellow("Proceed with care!"),
-                 bullet = "warning",
-                 bullet_col = "yellow")
+    if (!overwrite) {
+      stop(dir_image, " already exists and is non-empty. If you want to",
+           " overwrite this directory, set 'overwrite' to TRUE.")
+    } else {
+      # delete folder for Docker files.
+      unlink(dir_image, recursive = TRUE)
+      if (verbose) {
+        cat_bullet("Deleting existing folder for Docker files: ", blue(dir_image),
+                   bullet = "tick",
+                   bullet_col = "green")
+      }
     }
   }
 
@@ -50,17 +58,6 @@ setup_dir_image <- function(pkg = ".",
   # set full path of docker folder.
   dir_source_packages <- file.path(dir_image, "source_packages")
 
-  # check if folder for source packages exists.
-  if (dir.exists(dir_source_packages)) {
-    unlink(dir_source_packages, recursive = TRUE)
-    if (verbose) {
-      cat_bullet("Deleting existing folder for source packages: ", blue(dir_source_packages),
-                 bullet = "tick",
-                 bullet_col = "green")
-    }
-
-  }
-
   # create docker folder.
   dir.create(dir_source_packages)
   if (verbose) {
@@ -72,16 +69,6 @@ setup_dir_image <- function(pkg = ".",
   # set path to Docker file.
   path_Dockerfile <- file.path(dir_image, "Dockerfile")
 
-  # delete any existing Dockerfile.
-  if (file.exists(path_Dockerfile)) {
-    file.remove(path_Dockerfile)
-    if (verbose) {
-      cat_bullet("Deleting existing Dockerfile: ", blue(path_Dockerfile),
-                 bullet = "tick",
-                 bullet_col = "green")
-    }
-  }
-
   # create empty Dockerfile.
   file.create(path_Dockerfile)
   if (verbose) {
@@ -90,12 +77,14 @@ setup_dir_image <- function(pkg = ".",
                bullet_col = "green")
   }
 
-
-  # return invisibly.
-  invisible(list(dir_image = dir_image,
-                 path_Dockerfile = path_Dockerfile,
-                 dir_source_packages = dir_source_packages,
-                 pkgname_pkgvrs = pkgname_pkgvrs))
+  # combine meta data for Docker files.
+  meta_data <- list(dir_image = dir_image,
+                    path_Dockerfile = path_Dockerfile,
+                    dir_source_packages = dir_source_packages,
+                    pkgname_pkgvrs = pkgname_pkgvrs)
+  
+  # return meta_data invisibly.
+  invisible(meta_data)
 
 }
 

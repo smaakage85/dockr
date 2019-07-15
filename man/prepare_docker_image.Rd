@@ -7,21 +7,23 @@
 prepare_docker_image(pkg = ".", directory = NULL,
   print_dockerfile = FALSE, verbose = TRUE, r_version = NULL,
   dependencies = c("Depends", "Imports", "LinkingTo"), base = FALSE,
-  recommended = FALSE, dir_src = NULL, prioritize_cran = TRUE)
+  recommended = FALSE, dir_src = NULL, prioritize_cran = TRUE,
+  overwrite = TRUE)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
 
-\item{directory}{\code{character} directory where the files for the Docker
-image are put, and from where the Docker image can be build.}
+\item{directory}{\code{character} directory where all files for the Docker
+image are saved, and from where the Docker image can be build.}
 
 \item{print_dockerfile}{\code{logical} should the resulting Dockerfile be
 printed?}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 
-\item{r_version}{\code{character} which version of R should the Docker image
-run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
+\item{r_version}{\code{character} which version of base R to include in the 
+Docker image, e.g. '3.6.0'. Defaults to NULL, which implies that the active 
+version of R will apply.}
 
 \item{dependencies}{character vector of dependency types to include.
     Choices are "Depends", "Imports", "LinkingTo", "Suggests",
@@ -44,12 +46,16 @@ run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
 directories in prioritized order. The first directory will have the highest
 priority.}
 
-\item{prioritize_cran}{\code{logical} should dependencies matched with
-CRAN be prioritized over matches with local source packages.}
+\item{prioritize_cran}{\code{logical} should R dependency packages matched
+with CRAN be prioritized over matches with local source packages?}
+
+\item{overwrite}{\code{logical} if the directory for the files for the
+Docker image already exists and is non-empty, should it be 
+deleted/overwritten?}
 }
 \value{
 \code{list} relevant meta data of the files, that constitute
-the Docker image. As a side effect the files for the Docker image -
+the Docker image. As a side effect all necessary files for the Docker image -
 including the resulting Dockerfile - are saved in the desired directory.
 }
 \description{
@@ -57,5 +63,6 @@ Prepares a Docker image for your R package by (1) identifying its R
 dependency packages, (2) looking up, what versions of these packages that
 are presently loaded or, subsidiarily, installed, (3) linking these specific
 dependencies to the right repositories and finally (4) creating all of the
-necessary files the Docker image - including the Dockerfile.
+necessary files the Docker image - including a Dockerfile. As side effects
+the package is built, installed and loaded.
 }

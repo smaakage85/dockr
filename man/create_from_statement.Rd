@@ -7,8 +7,9 @@
 create_from_statement(r_version = NULL, verbose = FALSE)
 }
 \arguments{
-\item{r_version}{\code{character} which version of R should the Docker image
-run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
+\item{r_version}{\code{character} which version of base R to include in the 
+Docker image, e.g. '3.6.0'. Defaults to NULL, which implies that the active 
+version of R will apply.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
@@ -17,5 +18,5 @@ run in, e.g. '3.6.0'. If set to NULL, the active version will apply.}
 }
 \description{
 Creates FROM statement for Dockerfile and sets it up with a relevant
-`rocker` image as a starting point.
+`rocker` base R image as a starting point.
 }

@@ -4,21 +4,25 @@
 #' dependency packages, (2) looking up, what versions of these packages that
 #' are presently loaded or, subsidiarily, installed, (3) linking these specific
 #' dependencies to the right repositories and finally (4) creating all of the
-#' necessary files the Docker image - including a Dockerfile.
+#' necessary files the Docker image - including a Dockerfile. As side effects
+#' the package is built, installed and loaded.
 #'
 #' @param verbose \code{logical} should messages be printed or not?
 #' @param directory \code{character} directory where all files for the Docker
 #' image are saved, and from where the Docker image can be build.
 #' @param print_dockerfile \code{logical} should the resulting Dockerfile be
-#' printed?
-#' @param r_version \code{character} which version of R to include in the 
+#' printed? 
+#' @param r_version \code{character} which version of base R to include in the 
 #' Docker image, e.g. '3.6.0'. Defaults to NULL, which implies that the active 
 #' version of R will apply.
 #' @param dir_src \code{character} directories with local source packages. Put
 #' directories in prioritized order. The first directory will have the highest
 #' priority.
 #' @param prioritize_cran \code{logical} should R dependency packages matched
-#' with CRAN be prioritized over matches with local source packages.
+#' with CRAN be prioritized over matches with local source packages?
+#' @param overwrite \code{logical} if the directory for the files for the
+#' Docker image already exists and is non-empty, should it be 
+#' deleted/overwritten?
 #'
 #' @inheritParams gtools::getDependencies
 #' @inheritParams devtools::build
@@ -39,12 +43,14 @@ prepare_docker_image <- function(pkg = ".",
                                  base = FALSE,
                                  recommended = FALSE,
                                  dir_src = NULL,
-                                 prioritize_cran = TRUE) {
+                                 prioritize_cran = TRUE,
+                                 overwrite = TRUE) {
 
   # setup directory for Docker image.
   paths <- setup_dir_image(pkg = pkg,
                            directory = directory,
-                           verbose = verbose)
+                           verbose = verbose,
+                           overwrite = overwrite)
 
   # build, install and load package.
   build_and_install_package(pkg = pkg,
