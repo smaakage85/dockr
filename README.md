@@ -8,12 +8,12 @@ Status](https://travis-ci.org/smaakage85/dockr.svg?branch=master)](https://travi
 [![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/dockr)](https://CRAN.R-project.org/package=dockr)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/dockr)](https://CRAN.R-project.org/package=dockr)
 
-`dockr` is a lightweight toolkit to build a lightweight Docker container
-image for your R package, in which the package itself is available. The
-Docker image seeks to mirror your R session as close as possible with
-respect to R specific dependencies. Both dependencies on CRAN R packages
-as well as local non-CRAN R packages will be included in the Docker
-container image.
+`dockr` is a small toolkit to build a lightweight Docker base R
+container image for your R package, in which the package itself is
+available. The Docker image seeks to mirror your R session as close as
+possible with respect to R specific dependencies. Both dependencies on
+CRAN R packages as well as local non-CRAN R packages will be included in
+the Docker container image.
 
 ## Installation
 
@@ -31,9 +31,9 @@ install.packages("dockr")
 
 ## Workflow
 
-In order do create the files, that constitute the Docker image, simply
-invoke the `prepare_docker_image()` function and point to the folder
-with your package.
+In order do create the files, that will constitute the Docker image,
+simply invoke the `prepare_docker_image()` function and point to the
+folder with your package.
 
 The workflow of `prepare_docker_image()` is summarized below:
 
@@ -41,19 +41,22 @@ The workflow of `prepare_docker_image()` is summarized below:
 2.  Identify R package dependencies of the package
 3.  Detect the version numbers of the loaded and installed versions of
     these packages on your system
-4.  Write Dockerfile and create all other files needed to build the
+4.  Link the individual packages to the right repositories (either CRAN
+    or local repos)
+5.  Write Dockerfile and create all other files needed to build the
     Docker image
 
 Now, I will let `dockr` do its magic and create the files for a Docker
-image container, in which `dockr` is installed together with all of the
-R package dependencies, `dockr` needs to run.
+base R container image, in which `dockr` is installed together with all
+of the R package dependencies, `dockr` needs to run.
 
-Beware that the files are created as side-effects of the function call.
+Beware that the files for the Docker image are created as side-effects
+of the function call.
 
 ``` r
 library(dockr)
 image_dockr <- prepare_docker_image(".")
-#> v Deleting existing folder for Docker files: C:/Users/Lars/Documents/dockr_0.8.0
+#> v Deleting existing folder for files for Docker image: C:/Users/Lars/Documents/dockr_0.8.0
 #> v Creating folder for files for Docker image: C:/Users/Lars/Documents/dockr_0.8.0
 #> v Creating folder for source packages: C:/Users/Lars/Documents/dockr_0.8.0/source_packages
 #> v Creating empty Dockerfile: C:/Users/Lars/Documents/dockr_0.8.0/Dockerfile
@@ -86,10 +89,9 @@ It is as easy as that\! Yeah\!
 
 ## What about non-R dependencies?
 
-`dockr` does *not* deal with any non-R dependencies what so ever at this
-point. In case that, for instance, your package has any Linux specific
-dependencies, you will have to install them yourself in the Docker
-container image.
+`dockr` does *not* deal with non-R dependencies at this point. In case
+that, for instance, your package has any Linux specific dependencies,
+you will have to install them yourself in the Docker container image.
 
 ## Contact
 

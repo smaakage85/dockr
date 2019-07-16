@@ -23,7 +23,7 @@ combine_deps <- function(pkg_deps, deps_cran, deps_local, prioritize_cran = FALS
   pkg_no_match <- pkg_deps[!pkg_deps$pkg %in% pkg_match, c("pkg", "vrs"), drop = FALSE]
   # handle case, when one or more packages were not found.
   if (nrow(pkg_no_match) > 0) {
-    stop("The following dependency packages were not found on CRAN or in local directories: \n",
+    stop("The following dependency packages were not found on CRAN nor in local directories: \n",
          paste(pkg_no_match$pkg, pkg_no_match$vrs, sep = "_", collapse = ", "))
   }
 

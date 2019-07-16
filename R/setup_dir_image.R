@@ -38,7 +38,7 @@ setup_dir_image <- function(pkg = ".",
       # delete folder for Docker files.
       unlink(dir_image, recursive = TRUE)
       if (verbose) {
-        cat_bullet("Deleting existing folder for Docker files: ", blue(dir_image),
+        cat_bullet("Deleting existing folder for files for Docker image: ", blue(dir_image),
                    bullet = "tick",
                    bullet_col = "green")
       }

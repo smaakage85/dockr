@@ -117,7 +117,7 @@ Also note, that CRAN R packages will be installed from relevant
 ### Folder with Source Packages
 
 The 'source_packages' folder contains the local (non-CRAN) packages, that have 
-to be installed in the Docker image container in order for `dockr` to run.
+to be installed in the Docker container image in order for `dockr` to run.
 
 Since `dockr` does not depend on any local (non-CRAN) packages, 
 `source_packages` only contains a source package version of `dockr` itself, 

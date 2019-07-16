@@ -30,8 +30,9 @@ identify_dependencies(pkg = pkg, dependencies = c("Depends", "Imports",
 \item{verbose}{\code{logical} should messages be printed or not?}
 }
 \value{
-\code{data.frame} all R package dependencies with version numbers of
-the corresponding (1) loaded or (2) installed packages.
+\code{list} with dependencies ordered recursively and a data.frame
+with all R package dependencies with version numbers of the corresponding (1)
+loaded or (2) installed packages.
 }
 \description{
 Identifies the R package dependencies of a package and the version numbers of

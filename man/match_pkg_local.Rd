@@ -11,9 +11,11 @@ match_pkg_local(pkgs_df = NULL, dir_src = NULL,
 \item{pkgs_df}{\code{data.frame} with packages and their respective version
 numbers to be matched.}
 
-\item{dir_src}{\code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest
-priority.}
+\item{dir_src}{\code{character} directories with local source packages. 
+Note, the source packages must have filenames like
+(packageName)_(packageVersion).tar.gz, e.g. "recorder_0.8.2.tar.gz".
+Put directories in prioritized order. The first directory will have the 
+highest priority.}
 
 \item{dir_src_docker}{\code{character} subdirectory of Docker image
 directory with relevant source packages, that will be installed in the Docker

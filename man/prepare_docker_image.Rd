@@ -42,9 +42,11 @@ version of R will apply.}
     FALSE.
     }
 
-\item{dir_src}{\code{character} directories with local source packages. Put
-directories in prioritized order. The first directory will have the highest
-priority.}
+\item{dir_src}{\code{character} directories with local source packages. 
+Note, the source packages must have filenames like
+(packageName)_(packageVersion).tar.gz, e.g. "recorder_0.8.2.tar.gz".
+Put directories in prioritized order. The first directory will have the 
+highest priority.}
 
 \item{prioritize_cran}{\code{logical} should R dependency packages matched
 with CRAN be prioritized over matches with local source packages?}
@@ -59,7 +61,7 @@ the Docker image. As a side effect all necessary files for the Docker image -
 including the resulting Dockerfile - are saved in the desired directory.
 }
 \description{
-Prepares a Docker image for your R package by (1) identifying its R
+Prepares a Docker base R image for your R package by (1) identifying its R
 dependency packages, (2) looking up, what versions of these packages that
 are presently loaded or, subsidiarily, installed, (3) linking these specific
 dependencies to the right repositories and finally (4) creating all of the

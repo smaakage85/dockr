@@ -1,6 +1,6 @@
 #' Prepare Docker Image
 #'
-#' Prepares a Docker image for your R package by (1) identifying its R
+#' Prepares a Docker base R image for your R package by (1) identifying its R
 #' dependency packages, (2) looking up, what versions of these packages that
 #' are presently loaded or, subsidiarily, installed, (3) linking these specific
 #' dependencies to the right repositories and finally (4) creating all of the
@@ -15,9 +15,11 @@
 #' @param r_version \code{character} which version of base R to include in the 
 #' Docker image, e.g. '3.6.0'. Defaults to NULL, which implies that the active 
 #' version of R will apply.
-#' @param dir_src \code{character} directories with local source packages. Put
-#' directories in prioritized order. The first directory will have the highest
-#' priority.
+#' @param dir_src \code{character} directories with local source packages. 
+#' Note, the source packages must have filenames like
+#' (packageName)_(packageVersion).tar.gz, e.g. "recorder_0.8.2.tar.gz".
+#' Put directories in prioritized order. The first directory will have the 
+#' highest priority.
 #' @param prioritize_cran \code{logical} should R dependency packages matched
 #' with CRAN be prioritized over matches with local source packages?
 #' @param overwrite \code{logical} if the directory for the files for the
@@ -46,6 +48,25 @@ prepare_docker_image <- function(pkg = ".",
                                  prioritize_cran = TRUE,
                                  overwrite = TRUE) {
 
+  # validate inputs.
+  if (!is.null(r_version)) {
+    if (!is.character(r_version)) {
+      stop("'r_version' must be character (or NULL).")
+    }
+    if (length(r_version) != 1) {
+      stop("'r_version' must have length 1.")
+    }
+  }
+  
+  if (!is.null(dir_src)) {
+    if (!is.character(dir_src)) {
+      stop("'dir_src' must be character (or NULL).")
+    }
+    if (length(dir_src) < 1) {
+      stop("'dir_src' must have a length of minimum 1.")
+    }
+  }
+  
   # setup directory for Docker image.
   paths <- setup_dir_image(pkg = pkg,
                            directory = directory,
@@ -78,10 +99,12 @@ prepare_docker_image <- function(pkg = ".",
                                     base = base,
                                     recommended = recommended,
                                     verbose = verbose)
-
+  # unlist items.
+  pkg_deps_recursively <- pkg_deps$deps_recursively
+  pkg_deps <- pkg_deps$deps_mirror
+  
   # match with CRAN packages.
-  deps_cran <- match_pkg_cran(pkg_deps,
-                              verbose)
+  deps_cran <- match_pkg_cran(pkg_deps, verbose)
 
   # look in parent folder of package, if no directory has been provided.
   if (is.null(dir_src)) {
@@ -98,7 +121,7 @@ prepare_docker_image <- function(pkg = ".",
   deps <- combine_deps(pkg_deps,
                        deps_cran,
                        deps_local,
-                       prioritize_cran = FALSE)
+                       prioritize_cran = prioritize_cran)
 
   # preparing install statements for specific versions of CRAN packages.
   cran_versions_statement <- create_statement_cran_versions(deps$deps_cran,
@@ -121,7 +144,8 @@ prepare_docker_image <- function(pkg = ".",
   local_packages_statement <-
     create_statement_local_pkgs(deps$deps_local,
                                 paths$dir_source_packages,
-                                verbose)
+                                verbose,
+                                pkg_deps_recursively)
 
   # preparing install statement for the package itself.
   install_main_package <- create_statement_main_package(paths$dir_source_packages,

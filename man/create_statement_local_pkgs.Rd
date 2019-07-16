@@ -5,7 +5,7 @@
 \title{Create Install Statements for Local Source Packages}
 \usage{
 create_statement_local_pkgs(pkgs_df, dir_src_docker = "",
-  verbose = TRUE)
+  verbose = TRUE, pkgs_deps)
 }
 \arguments{
 \item{pkgs_df}{\code{data.frame} with names and version numbers of desired
@@ -16,6 +16,8 @@ directory with relevant source packages, that will be installed in the Docker
 container. Relevant local source packages will be copied to this directory.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
+
+\item{pkgs_deps}{\code{character} package dependencies ordered recursively.}
 }
 \value{
 \code{character} install chunk for Dockerfile.

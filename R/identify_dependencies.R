@@ -9,8 +9,9 @@
 #' @importFrom pkgload pkg_name
 #' @importFrom gtools getDependencies
 #'
-#' @return \code{data.frame} all R package dependencies with version numbers of
-#' the corresponding (1) loaded or (2) installed packages.
+#' @return \code{list} with dependencies ordered recursively and a data.frame
+#' with all R package dependencies with version numbers of the corresponding (1)
+#' loaded or (2) installed packages.
 #'
 #' @importFrom gtools getDependencies
 identify_dependencies <- function(pkg = pkg,
@@ -37,7 +38,7 @@ identify_dependencies <- function(pkg = pkg,
   }
 
   # mirror loaded (and installed) version numbers of all dependency R packages.
-  loaded_deps <- mirror_package_versions(deps)
+  deps_mirror <- mirror_package_versions(deps)
 
   # print service information.
   if (verbose) {
@@ -47,6 +48,6 @@ identify_dependencies <- function(pkg = pkg,
   }
 
   # return R package dependencies with version numbers.
-  loaded_deps
+  list(deps_recursively = deps, deps_mirror = deps_mirror)
 
 }

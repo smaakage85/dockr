@@ -8,8 +8,6 @@
 #'
 #' @return invisibly. As a side effect source package files (*.tar.gz) are
 #' copied to Docker subdirectory.
-#'
-#' @importFrom pbapply pbmapply
 copy_local_pkgs <- function(pkgs_df = NULL,
                             dir_src = NULL,
                             dir_src_docker = NULL,
@@ -27,7 +25,7 @@ copy_local_pkgs <- function(pkgs_df = NULL,
                bullet_col = "gray")
   }
 
-  pbmapply(
+  mapply(
     FUN = copy_local_pkgs_helper,
     pkg = pkgs_df$pkg,
     vrs = pkgs_df$vrs,
