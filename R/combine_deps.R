@@ -11,7 +11,7 @@
 #' @return \code{list} prioritized dependencies split into CRAN dependencies
 #' and dependencies of local source packages.
 combine_deps <- function(pkg_deps, deps_cran, deps_local, prioritize_cran = FALSE) {
-
+  
   # handle case, when there are no dependencies.
   if (is.null(pkg_deps) || nrow(pkg_deps) == 0) {
     return(NULL)

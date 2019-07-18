@@ -36,6 +36,15 @@
 #' @export
 #'
 #' @importFrom crayon cyan silver yellow
+#' 
+#' @examples
+#' \donttest{
+#' # create all files for a Docker image for the package in the current directory
+#' img <- prepare_docker_image(pkg = ".")
+#' 
+#' # look up meta data for files for Docker image
+#' img
+#' }
 prepare_docker_image <- function(pkg = ".",
                                  directory = NULL,
                                  print_dockerfile = FALSE,

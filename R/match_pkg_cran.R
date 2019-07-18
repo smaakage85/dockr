@@ -6,6 +6,8 @@
 #' corresponding version numbers "vrs".
 #' @inheritParams prepare_docker_image
 #' 
+#' @importFrom curl has_internet
+#' 
 #' @return \code{data.frame} with package names (and versions) of dependency
 #' packages matched with CRAN repos.
 #'
@@ -13,11 +15,17 @@
 match_pkg_cran <- function(pkgs_df,
                            verbose = TRUE) {
 
+  
   # handle case when there are no dependencies.
   if (is.null(pkgs_df)) {
     return(NULL)
   }
 
+  # check if there is connection to the internet.
+  if (!has_internet()) {
+    stop("No connection to the internet. Please establish connection.")
+  }
+  
   # what package versions are available on CRAN presently?
   ap <- available.packages()
   ap <- as.data.frame(ap)

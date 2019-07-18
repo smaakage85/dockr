@@ -42,7 +42,7 @@ install.packages("dockr")
 
 ## Workflow
 
-In order do create the files, that will constitute the Docker image, simply 
+In order to create the files, that will constitute the Docker image, simply 
 invoke the `prepare_docker_image()` function and point to the folder with your 
 package. 
 

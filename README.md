@@ -31,7 +31,7 @@ install.packages("dockr")
 
 ## Workflow
 
-In order do create the files, that will constitute the Docker image,
+In order to create the files, that will constitute the Docker image,
 simply invoke the `prepare_docker_image()` function and point to the
 folder with your package.
 
@@ -56,10 +56,9 @@ of the function call.
 ``` r
 library(dockr)
 image_dockr <- prepare_docker_image(".")
-#> v Deleting existing folder for files for Docker image: C:/Users/Lars/Documents/dockr_0.8.0
-#> v Creating folder for files for Docker image: C:/Users/Lars/Documents/dockr_0.8.0
-#> v Creating folder for source packages: C:/Users/Lars/Documents/dockr_0.8.0/source_packages
-#> v Creating empty Dockerfile: C:/Users/Lars/Documents/dockr_0.8.0/Dockerfile
+#> v Creating folder for files for Docker image: C:/Users/Lars/Documents/dockr_0.8.1
+#> v Creating folder for source packages: C:/Users/Lars/Documents/dockr_0.8.1/source_packages
+#> v Creating empty Dockerfile: C:/Users/Lars/Documents/dockr_0.8.1/Dockerfile
 #> --- Building, installing and loading package...
 #> Writing NAMESPACE
 #> Writing NAMESPACE
@@ -74,13 +73,13 @@ image_dockr <- prepare_docker_image(".")
 #> v Closing connection to Dockerfile
 #> - in R : 
 #> => to inspect Dockerfile run:
-#> dockr::print_file("C:/Users/Lars/Documents/dockr_0.8.0/Dockerfile") 
+#> dockr::print_file("C:/Users/Lars/Documents/dockr_0.8.1/Dockerfile") 
 #> => to edit Dockerfile run:
-#> dockr::write_lines_to_file([lines], "C:/Users/Lars/Documents/dockr_0.8.0/Dockerfile") 
+#> dockr::write_lines_to_file([lines], "C:/Users/Lars/Documents/dockr_0.8.1/Dockerfile") 
 #> - in Shell : 
 #> => to build Docker image run:
-#> cd C:/Users/Lars/Documents/dockr_0.8.0 
-#> docker build -t dockr_0.8.0 .
+#> cd C:/Users/Lars/Documents/dockr_0.8.1 
+#> docker build -t dockr_0.8.1 .
 ```
 
 Great, all necessary files for the Docker image have been created, and

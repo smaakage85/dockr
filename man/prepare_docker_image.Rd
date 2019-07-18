@@ -68,3 +68,12 @@ dependencies to the right repositories and finally (4) creating all of the
 necessary files the Docker image - including a Dockerfile. As side effects
 the package is built, installed and loaded.
 }
+\examples{
+\donttest{
+# create all files for a Docker image for the package in the current directory
+img <- prepare_docker_image(pkg = ".")
+
+# look up meta data for files for Docker image
+img
+}
+}
