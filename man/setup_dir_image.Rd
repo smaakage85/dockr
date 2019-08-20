@@ -10,9 +10,6 @@ setup_dir_image(pkg = ".", directory = NULL, overwrite = TRUE,
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
 
-\item{directory}{\code{character} directory where all files for the Docker
-image are saved, and from where the Docker image can be build.}
-
 \item{overwrite}{\code{logical} if the directory for the files for the
 Docker image already exists and is non-empty, should it be 
 deleted/overwritten?}

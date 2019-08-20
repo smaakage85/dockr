@@ -4,17 +4,17 @@
 \alias{prepare_docker_image}
 \title{Prepare Docker Image}
 \usage{
-prepare_docker_image(pkg = ".", directory = NULL,
-  print_dockerfile = FALSE, verbose = TRUE, r_version = NULL,
-  dependencies = c("Depends", "Imports", "LinkingTo"), base = FALSE,
-  recommended = FALSE, dir_src = NULL, prioritize_cran = TRUE,
-  overwrite = TRUE)
+prepare_docker_image(pkg = ".", dir_image = NULL,
+  print_dockerfile = FALSE, dir_install = "temp", verbose = TRUE,
+  r_version = NULL, dependencies = c("Depends", "Imports",
+  "LinkingTo"), base = FALSE, recommended = FALSE, dir_src = NULL,
+  prioritize_cran = TRUE, overwrite = TRUE)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
 
-\item{directory}{\code{character} directory where all files for the Docker
-image are saved, and from where the Docker image can be build.}
+\item{dir_image}{\code{character} directory where to create folder for 
+all files for the Docker image, and from where the Docker image can be build.}
 
 \item{print_dockerfile}{\code{logical} should the resulting Dockerfile be
 printed?}

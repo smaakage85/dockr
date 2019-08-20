@@ -42,6 +42,7 @@ build_and_install_package <- function(pkg = ".",
 
   # install package.
   install.packages(pkgs = paste0(file.path(dir_source_packages, pkgname_pkgversion), ".tar.gz"),
+                   lib = tempdir(),
                    repos = NULL)
 
   # return invisibly.

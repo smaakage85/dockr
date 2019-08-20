@@ -8,8 +8,8 @@
 #' the package is built, installed and loaded.
 #'
 #' @param verbose \code{logical} should messages be printed or not?
-#' @param directory \code{character} directory where all files for the Docker
-#' image are saved, and from where the Docker image can be build.
+#' @param dir_image \code{character} directory where to create folder for 
+#' all files for the Docker image, and from where the Docker image can be build.
 #' @param print_dockerfile \code{logical} should the resulting Dockerfile be
 #' printed? 
 #' @param r_version \code{character} which version of base R to include in the 
@@ -46,8 +46,9 @@
 #' img
 #' }
 prepare_docker_image <- function(pkg = ".",
-                                 directory = NULL,
+                                 dir_image = NULL,
                                  print_dockerfile = FALSE,
+                                 dir_install = "temp",
                                  verbose = TRUE,
                                  r_version = NULL,
                                  dependencies = c("Depends", "Imports", "LinkingTo"),
@@ -67,6 +68,21 @@ prepare_docker_image <- function(pkg = ".",
     }
   }
   
+  # directory for docker files must be provided by the user according to CRAN 
+  # policies.
+  if (is.null(dir_image)) {
+    stop("Please choose location for files for docker image with the ",
+         "'dir_image' argument.")
+  } else  {
+    if (!is.character(dir_image)) {
+      stop("'dir_image' must be a filepath - and belong to the 'character'",
+           "class.")
+    }
+    if (length(dir_image) != 1) {
+      stop("'dir_image' must have a length 1.")
+    }
+  }
+  
   if (!is.null(dir_src)) {
     if (!is.character(dir_src)) {
       stop("'dir_src' must be character (or NULL).")
@@ -78,10 +94,16 @@ prepare_docker_image <- function(pkg = ".",
   
   # setup directory for Docker image.
   paths <- setup_dir_image(pkg = pkg,
-                           directory = directory,
+                           directory = dir_image ,
                            verbose = verbose,
                            overwrite = overwrite)
 
+  # save library paths in order to restore on exit.
+  lp <- .libPaths()
+  
+  # setup library paths.
+  set_lib_paths(dir_install = dir_install)
+  
   # build, install and load package.
   build_and_install_package(pkg = pkg,
                             paths$dir_source_packages,
@@ -90,8 +112,7 @@ prepare_docker_image <- function(pkg = ".",
 
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)
-  on.exit(close(Dockerfile))
-
+  
   # write Dockerfile.
   if (verbose) {
     cat_bullet("Writing Dockerfile...",
@@ -196,6 +217,9 @@ prepare_docker_image <- function(pkg = ".",
       pkgname_pkgvrs = paths$pkgname_pkgvrs
     )
   }
+  
+  # clean up, reset lib paths.
+  on.exit({close(Dockerfile); .libPaths(lp)})
 
   # return relevant information and meta data.
   list(paths = paths,

@@ -1,12 +1,12 @@
 Package: dockr
-Title: Creation of Lightweight Docker Base R Images for Your R Packages
+Title: Creation of Lightweight Docker Images for Your Packages
 Version: 0.8.1
 Authors@R: 
     person(given = "Lars",
            family = "Kjeldgaard",
            role = c("aut", "cre"),
            email = "lars_kjeldgaard@hotmail.com")
-Description: Build a lightweight Docker base R container image for your R 
+Description: Build a lightweight Docker r-base container image for your R 
     package, in which the package itself is available. The Docker image seeks 
     to mirror your R session as close as possible with respect to R specific 
     dependencies. Both dependencies on CRAN R packages as well as local non-CRAN 
