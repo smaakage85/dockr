@@ -1,8 +1,6 @@
 #' Set Library Paths Temporarily
-#'
-#' @param dir_install \code{character} where should the package be installed
-#' on your system. Choose from `auto` (automatic detection), `temp` 
-#' (temporary directory) or specify directory yourself.
+#' 
+#' @inheritParams prepare_docker_image
 #'
 #' @return invisibly. Sets the library paths temporarily as a side effect. 
 #' This will determine, where the package is installed.
@@ -29,7 +27,7 @@ set_lib_paths <- function(dir_install) {
     dir_install <- tempdir()
   }
   
-  if (!dir.exists(dir_install)) {
+  if (dir_install != "auto" & !dir.exists(dir_install)) {
     stop("'dir_install' does not exist.")
   }
   

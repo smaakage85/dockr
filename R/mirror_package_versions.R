@@ -10,7 +10,7 @@
 #' @return \code{data.frame} with package names and their relevant version 
 #' numbers.
 #'
-#' @importFrom utils sessionInfo installed.packages
+#' @importFrom utils sessionInfo installed.packages packageDescription
 mirror_package_versions <- function(pkgs) {
 
   # handle case, when there are no packages.
@@ -42,16 +42,17 @@ mirror_package_versions <- function(pkgs) {
 
   # what packages are installed but not loaded?
   pkgs_installed <- pkgs[!pkgs %in% names(pkgs_loaded_info)]
-
+  
   if (length(pkgs_installed) > 0) {
+
     # get information about installed packages.
-    pkgs_installed_info <- as.data.frame(installed.packages(),
-                                         stringsAsFactors = FALSE)
+    pkgs_installed_info <- lapply(pkgs_installed, identify_installed_version)
+    pkgs_installed_info <- do.call(rbind, pkgs_installed_info)
 
     # look up version number(s) packages installed, but not loaded.
     pkgs_installed_versions <- vapply(pkgs_installed, function(x) {
       version <- pkgs_installed_info[pkgs_installed_info$Package == x, "Version"]
-      # pick first version (on search path)
+      # pick first version (there should only be one)
       version[[1]]},
       FUN.VALUE = character(1))
 
@@ -79,3 +80,20 @@ mirror_package_versions <- function(pkgs) {
   pkg_vrs_df
 
 }
+
+# Find out what version of a given package, that is installed. Helper function.
+identify_installed_version <- function(pkg_name) {
+  
+  # look up package description.
+  package_description <- suppressWarnings(packageDescription(pkg_name))
+  
+  # handle case, where package is not installed.
+  if (!is.list(package_description)) {
+    return(data.frame(Package = NULL, Version = NULL, stringsAsFactors = FALSE))
+  }
+  
+  data.frame(Package = pkg_name, Version = package_description$Version,
+             stringsAsFactors = FALSE)
+  
+} 
+

@@ -28,6 +28,7 @@ print_end_service_information <- function(path_Dockerfile,
   } else {
     cat(cyan(paste0("docker build -t ", pkgname_pkgvrs, " .")), "\n")
   }
+  cat(silver("Please note that Docker must be installed in order for you to build image.\n"))
 
   # return invisibly.
   invisible(NULL)

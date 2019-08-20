@@ -1,15 +1,16 @@
 #' Prepare Docker Image
 #'
-#' Prepares a Docker base R image for your R package by (1) identifying its R
-#' dependency packages, (2) looking up, what versions of these packages that
-#' are presently loaded or, subsidiarily, installed, (3) linking these specific
-#' dependencies to the right repositories and finally (4) creating all of the
-#' necessary files the Docker image - including a Dockerfile. As side effects
-#' the package is built, installed and loaded.
+#' Prepares a Docker r-base image for your R package by (1) building and 
+#' installing the package on your system, (2) identifying R package dependencies
+#' of the package, (3) detecting the version numbers of the loaded and installed 
+#' versions of these packages on your system, (4) linking the individual
+#' packages to the right repositories (either CRAN or local repos) and (5) 
+#' writing Dockerfile and creating all other files needed to build the 
+#' Docker r-base image.
 #'
 #' @param verbose \code{logical} should messages be printed or not?
 #' @param dir_image \code{character} directory where to create folder for 
-#' all files for the Docker image, and from where the Docker image can be build.
+#' all files for the Docker image, from where the Docker image can be build.
 #' @param print_dockerfile \code{logical} should the resulting Dockerfile be
 #' printed? 
 #' @param r_version \code{character} which version of base R to include in the 
@@ -25,6 +26,9 @@
 #' @param overwrite \code{logical} if the directory for the files for the
 #' Docker image already exists and is non-empty, should it be 
 #' deleted/overwritten?
+#' @param dir_install \code{character} where should the package be installed
+#' on your system. Choose from `auto` (automatic detection), `temp` 
+#' (temporary directory) or specify directory yourself.
 #'
 #' @inheritParams gtools::getDependencies
 #' @inheritParams devtools::build
@@ -40,7 +44,7 @@
 #' @examples
 #' \donttest{
 #' # create all files for a Docker image for the package in the current directory
-#' img <- prepare_docker_image(pkg = ".")
+#' img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
 #' 
 #' # look up meta data for files for Docker image
 #' img
@@ -48,7 +52,7 @@
 prepare_docker_image <- function(pkg = ".",
                                  dir_image = NULL,
                                  print_dockerfile = FALSE,
-                                 dir_install = "temp",
+                                 dir_install = NULL,
                                  verbose = TRUE,
                                  r_version = NULL,
                                  dependencies = c("Depends", "Imports", "LinkingTo"),
@@ -85,16 +89,28 @@ prepare_docker_image <- function(pkg = ".",
   
   if (!is.null(dir_src)) {
     if (!is.character(dir_src)) {
-      stop("'dir_src' must be character (or NULL).")
+      stop("'dir_src' must be a character (or NULL).")
     }
     if (length(dir_src) < 1) {
       stop("'dir_src' must have a length of minimum 1.")
     }
   }
   
+  if (!is.null(pkg)) {
+    if (!is.character(pkg)) {
+      stop("'pkg' must be a character.")
+    }
+    if (length(pkg) != 1) {
+      stop("'pkg' must have a length of 1.")
+    }
+    if (!dir.exists(pkg)) {
+      stop("'pkg' must be a directory.")
+    }
+  }
+
   # setup directory for Docker image.
   paths <- setup_dir_image(pkg = pkg,
-                           directory = dir_image ,
+                           dir_image = dir_image ,
                            verbose = verbose,
                            overwrite = overwrite)
 
@@ -135,11 +151,6 @@ prepare_docker_image <- function(pkg = ".",
   
   # match with CRAN packages.
   deps_cran <- match_pkg_cran(pkg_deps, verbose)
-
-  # look in parent folder of package, if no directory has been provided.
-  if (is.null(dir_src)) {
-    dir_src <- dirname(pkg_path())
-  }
 
   # match with local source packages.
   deps_local <- match_pkg_local(pkg_deps,

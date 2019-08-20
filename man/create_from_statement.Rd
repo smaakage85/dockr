@@ -18,5 +18,5 @@ version of R will apply.}
 }
 \description{
 Creates FROM statement for Dockerfile and sets it up with a relevant
-`rocker` base R image as a starting point.
+`rocker` r-base image as a starting point.
 }

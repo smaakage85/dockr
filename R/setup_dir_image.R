@@ -12,22 +12,19 @@
 #' @importFrom cli cat_bullet
 #' @importFrom pkgload pkg_name pkg_version pkg_path
 setup_dir_image <- function(pkg = ".",
-                            directory = NULL,
+                            dir_image = NULL,
                             overwrite = TRUE,
                             verbose = FALSE) {
 
   # set root directory to path of package, if it has not been provided by the 
   # user.
-  if (is.null(directory)) {
-    directory <- dirname(pkg_path(path = pkg))
-  }
 
   # check permissions for directory.
-  check_permissions_dir(directory)
+  check_permissions_dir(dir_image)
 
   # set full path of docker folder.
   pkgname_pkgvrs <- paste0(pkg_name(path = pkg), "_", pkg_version(path = pkg))
-  dir_image <- file.path(directory, pkgname_pkgvrs)
+  dir_image <- file.path(dir_image, pkgname_pkgvrs)
 
   # check if folder for Docker files is non-empty.
   if (length(list.files(dir_image)) > 0) {

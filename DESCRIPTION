@@ -1,6 +1,6 @@
 Package: dockr
 Title: Creation of Lightweight Docker Images for Your Packages
-Version: 0.8.1
+Version: 0.8.2
 Authors@R: 
     person(given = "Lars",
            family = "Kjeldgaard",
@@ -21,6 +21,7 @@ Imports:
     gtools,
     crayon,
     devtools,
+    roxygen2,
     curl
 RoxygenNote: 6.1.1
 Suggests: 

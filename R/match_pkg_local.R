@@ -15,8 +15,15 @@ match_pkg_local <- function(pkgs_df = NULL,
                             dir_src_docker = NULL,
                             verbose = TRUE) {
 
-  # handle case, when there are no dependencies.
+  # handle case, when there are no dependencies, or when there is no place to
+  # look.
   if (is.null(pkgs_df)) {
+    return(NULL)
+  }
+  
+  if (is.null(dir_src)) {
+    message("If you have any dependencies on local source packages, please ",
+            "set 'dir_src'.")
     return(NULL)
   }
 

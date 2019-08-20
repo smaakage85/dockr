@@ -6,6 +6,7 @@ deps_cran <- structure(list(pkg = c("p1", "p2", "p3"),
                             source = c("present", "present", "archive")),
                        row.names = c(1L, 2L, 5L), class = "data.frame")
 
+
 # simulate local deps (no overlap).
 deps_local <- structure(list(pkg = "p4", 
                              vrs = "1.0", 

@@ -16,7 +16,7 @@
 #' @examples
 #' \donttest{
 #' # create all files for a Docker image for the package in the current directory
-#' img <- prepare_docker_image(pkg = ".")
+#' img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
 #' 
 #' # append lines to Dockerfile.
 #' write_lines_to_file(c("# dummy line 1", "# dummy line 2"),

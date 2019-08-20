@@ -15,7 +15,7 @@ Prints all contents of text file.
 \examples{
 \donttest{
 # create all files for a Docker image for the package in the current directory
-img <- prepare_docker_image(pkg = ".")
+img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
 
 # print resulting Dockerfile
 print_file(img$paths$path_Dockerfile)

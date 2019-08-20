@@ -5,7 +5,7 @@
 \title{Prepare Docker Image}
 \usage{
 prepare_docker_image(pkg = ".", dir_image = NULL,
-  print_dockerfile = FALSE, dir_install = "temp", verbose = TRUE,
+  print_dockerfile = FALSE, dir_install = NULL, verbose = TRUE,
   r_version = NULL, dependencies = c("Depends", "Imports",
   "LinkingTo"), base = FALSE, recommended = FALSE, dir_src = NULL,
   prioritize_cran = TRUE, overwrite = TRUE)
@@ -14,10 +14,14 @@ prepare_docker_image(pkg = ".", dir_image = NULL,
 \item{pkg}{Path to a package, or within a package.}
 
 \item{dir_image}{\code{character} directory where to create folder for 
-all files for the Docker image, and from where the Docker image can be build.}
+all files for the Docker image, from where the Docker image can be build.}
 
 \item{print_dockerfile}{\code{logical} should the resulting Dockerfile be
 printed?}
+
+\item{dir_install}{\code{character} where should the package be installed
+on your system. Choose from `auto` (automatic detection), `temp` 
+(temporary directory) or specify directory yourself.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
 
@@ -61,17 +65,18 @@ the Docker image. As a side effect all necessary files for the Docker image -
 including the resulting Dockerfile - are saved in the desired directory.
 }
 \description{
-Prepares a Docker base R image for your R package by (1) identifying its R
-dependency packages, (2) looking up, what versions of these packages that
-are presently loaded or, subsidiarily, installed, (3) linking these specific
-dependencies to the right repositories and finally (4) creating all of the
-necessary files the Docker image - including a Dockerfile. As side effects
-the package is built, installed and loaded.
+Prepares a Docker r-base image for your R package by (1) building and 
+installing the package on your system, (2) identifying R package dependencies
+of the package, (3) detecting the version numbers of the loaded and installed 
+versions of these packages on your system, (4) linking the individual
+packages to the right repositories (either CRAN or local repos) and (5) 
+writing Dockerfile and creating all other files needed to build the 
+Docker r-base image.
 }
 \examples{
 \donttest{
 # create all files for a Docker image for the package in the current directory
-img <- prepare_docker_image(pkg = ".")
+img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
 
 # look up meta data for files for Docker image
 img

@@ -4,11 +4,14 @@
 \alias{setup_dir_image}
 \title{Setup Directory for Docker Image}
 \usage{
-setup_dir_image(pkg = ".", directory = NULL, overwrite = TRUE,
+setup_dir_image(pkg = ".", dir_image = NULL, overwrite = TRUE,
   verbose = FALSE)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
+
+\item{dir_image}{\code{character} directory where to create folder for 
+all files for the Docker image, from where the Docker image can be build.}
 
 \item{overwrite}{\code{logical} if the directory for the files for the
 Docker image already exists and is non-empty, should it be 

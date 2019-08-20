@@ -1,8 +1,11 @@
 This is a resubmission.
 
-I fixed the warning and have provided a couple of examples for exported functions. 
-I have set the examples to "\donttest", since the only outputs from the functions are
-side effects. Also I have written a couple of unit tests.
+I have fixed issues adressed by  CRAN. I have
+- Removed redundant "R"s from title.
+- More unit tests added.
+- Force user to choose directory for writing/saving files.
+- The package now uses packageDescription() in stead of installed.packages() to
+look up versions of installed packages.
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes
