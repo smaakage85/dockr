@@ -58,9 +58,9 @@ package is installed as a side effect (in the ‘dir\_install’ directory).
 library(dockr)
 image_dockr <- prepare_docker_image(".", dir_image = tempdir(), 
                                     dir_install = "temp")
-#> v Creating folder for files for Docker image: C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2
-#> v Creating folder for source packages: C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2/source_packages
-#> v Creating empty Dockerfile: C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2/Dockerfile
+#> v Creating folder for files for Docker image: C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG/dockr_0.8.2
+#> v Creating folder for source packages: C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG/dockr_0.8.2/source_packages
+#> v Creating empty Dockerfile: C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG/dockr_0.8.2/Dockerfile
 #> --- Building, installing and loading package...
 #> Writing NAMESPACE
 #> Writing NAMESPACE
@@ -74,12 +74,12 @@ image_dockr <- prepare_docker_image(".", dir_image = tempdir(),
 #> v Closing connection to Dockerfile
 #> - in R : 
 #> => to inspect Dockerfile run:
-#> dockr::print_file("C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2/Dockerfile") 
+#> dockr::print_file("C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG/dockr_0.8.2/Dockerfile") 
 #> => to edit Dockerfile run:
-#> dockr::write_lines_to_file([lines], "C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2/Dockerfile") 
+#> dockr::write_lines_to_file([lines], "C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG/dockr_0.8.2/Dockerfile") 
 #> - in Shell : 
 #> => to build Docker image run:
-#> cd C:\Users\Lars\AppData\Local\Temp\RtmpOOadk0/dockr_0.8.2 
+#> cd C:\Users\Lars\AppData\Local\Temp\Rtmpw7ckvG\dockr_0.8.2 
 #> docker build -t dockr_0.8.2 . 
 #> Please note that Docker must be installed in order for you to build image.
 ```

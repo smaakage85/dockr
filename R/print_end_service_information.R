@@ -22,7 +22,7 @@ print_end_service_information <- function(path_Dockerfile,
   # Shell stuff.
   cat(silver("- in", yellow("Shell"), silver(":"), "\n"))
   cat(silver("=> to build Docker image run:\n"))
-  cat(cyan(paste0("cd ", dir_image)), "\n")
+  cat(cyan(paste0("cd ", normalizePath(dir_image))), "\n")
   if (Sys.info()['sysname'] == "Linux") {
     cat(cyan(paste0("sudo docker build -t ", pkgname_pkgvrs, " .")), "\n")
   } else {
