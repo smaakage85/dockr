@@ -1,11 +1,15 @@
 This is a resubmission.
 
-I have fixed issues adressed by  CRAN. I have
-- Removed redundant "R"s from title.
-- More unit tests added.
-- Force user to choose directory for writing/saving files.
-- The package now uses packageDescription() in stead of installed.packages() to
-look up versions of installed packages.
+I have fixed issues adressed by CRAN. I have
+- Changed examples for functions `write_lines_to_file()` and `print_file()` into
+executable examples.
+- I have set the example for `prepare_docker_image()` to `dontrun`, because the
+function call takes more than five seconds to run. Please also note that the 
+function is called succesfully in the tests (test-prepare_docker_image.R) with 
+_exactly_ the same arguments.
+- In comparison the function `install.packages()` from the `utils` package,
+that install packages, also only has an example, that is not run. So I really
+hope, that it is okay with you.
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes

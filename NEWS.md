@@ -1,3 +1,3 @@
-# dockr 0.8.0
+# dockr 0.8.3
 
-* First official release on CRAN.
+* First submission to CRAN.

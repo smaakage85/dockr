@@ -3,7 +3,6 @@ context("prepare_docker_image")
 # set options temporarily.
 opts <- options()
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
-on.exit(options(opts))
 
 # get package directory.
 package_dir <- system.file(package = "dockr")
@@ -43,3 +42,6 @@ test_that("correct handling of invalid (default) inputs", {
   expect_error(prepare_docker_image(dir_image = tempdir()))
 
 })
+
+# clean up and reset options.
+options(opts)

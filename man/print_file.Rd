@@ -9,15 +9,19 @@ print_file(path)
 \arguments{
 \item{path}{\code{character} file path of text file.}
 }
+\value{
+prints contents of file as a side effect.
+}
 \description{
 Prints all contents of text file.
 }
 \examples{
-\donttest{
-# create all files for a Docker image for the package in the current directory
-img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
+# create empty file.
+fp <- file.path(tempdir(), "tester")
+file.create(fp)
 
-# print resulting Dockerfile
-print_file(img$paths$path_Dockerfile)
-}
+# append lines to Dockerfile.
+write_lines_to_file("# no nonsense", filepath = fp)
+
+print_file(fp)
 }

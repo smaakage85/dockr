@@ -6,7 +6,6 @@
 #' version of R will be used.
 #'
 #' @return \code{character} string with FROM statement for Dockerfile.
-#' @export
 set_rocker_image <- function(r_version = NULL) {
   
   # get R version number.

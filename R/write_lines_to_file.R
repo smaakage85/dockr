@@ -14,18 +14,17 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
-#' # create all files for a Docker image for the package in the current directory
-#' img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
+#' # create empty file.
+#' fp <- file.path(tempdir(), "dummy")
+#' file.create(fp)
 #' 
 #' # append lines to Dockerfile.
-#' write_lines_to_file(c("# dummy line 1", "# dummy line 2"),
-#' img$paths$path_Dockerfile)
+#' write_lines_to_file(c("# dummy line 1", "# dummy line 2"), 
+#' filepath = fp)
 #' 
 #' # prepend lines to Dockerfile.
-#' write_lines_to_file(c("# dummy line 1", "# dummy line 2"),
-#' img$paths$path_Dockerfile, prepend = TRUE)
-#' }
+#' write_lines_to_file(c("# dummy line 3", "# dummy line 4"), 
+#' filepath = fp, prepend = TRUE)
 write_lines_to_file <- function(lines,
                                 filepath = "",
                                 prepend = FALSE,

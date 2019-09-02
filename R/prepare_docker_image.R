@@ -37,17 +37,31 @@
 #' the Docker image. As a side effect all necessary files for the Docker image -
 #' including the resulting Dockerfile - are saved in the desired directory.
 #'
-#' @export
-#'
 #' @importFrom crayon cyan silver yellow
 #' 
-#' @examples
-#' \donttest{
-#' # create all files for a Docker image for the package in the current directory
-#' img <- prepare_docker_image(pkg = ".", dir_image = tempdir(), dir_install = "temp")
+#' @export
 #' 
-#' # look up meta data for files for Docker image
+#' @examples
+#' \dontrun{
+#' # some preparations for this example (you will typically not have to do this).
+#' # set repos (temporarily).
+#' opts <- options()
+#' options(repos = c(CRAN = "https://cran.rstudio.com/"))
+#' 
+#' # retrieve package directory for the 'dockr' package.
+#' package_dir <- system.file(package = "dockr")
+#' # this concludes the preparations. 
+#' 
+#' # now for the real action.
+#' 
+#' # create all files for a Docker image for the package in the current directory.
+#' img <- prepare_docker_image(pkg = package_dir, dir_image = tempdir(), dir_install = "temp")
+#' 
+#' # look up meta data for files for Docker image.
 #' img
+#' 
+#' # clean up and reset options.
+#' options(opts)
 #' }
 prepare_docker_image <- function(pkg = ".",
                                  dir_image = NULL,
