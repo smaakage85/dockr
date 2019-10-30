@@ -5,7 +5,7 @@
 \title{Build, Install and Load Package}
 \usage{
 build_and_install_package(pkg = ".", dir_source_packages,
-  pkgname_pkgversion, verbose = FALSE)
+  pkgname_pkgversion, verbose = FALSE, ...)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
@@ -18,6 +18,8 @@ specific local source packages, that will be included in the Docker container
 with the version number of the package.}
 
 \item{verbose}{\code{logical} should messages be printed or not?}
+
+\item{...}{optional arguments for install packages.}
 }
 \value{
 invisibly. The package is built, installed and loaded as side 

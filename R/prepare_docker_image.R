@@ -29,6 +29,7 @@
 #' @param dir_install \code{character} where should the package be installed
 #' on your system. Choose from `auto` (automatic detection), `temp` 
 #' (temporary directory) or specify directory yourself.
+#' @param ... optional arguments for `install.packages()`.
 #'
 #' @inheritParams gtools::getDependencies
 #' @inheritParams devtools::build
@@ -43,11 +44,6 @@
 #' 
 #' @examples
 #' \dontrun{
-#' # some preparations for this example (you will typically not have to do this).
-#' # set repos (temporarily).
-#' opts <- options()
-#' options(repos = c(CRAN = "https://cran.rstudio.com/"))
-#' 
 #' # retrieve package directory for the 'dockr' package.
 #' package_dir <- system.file(package = "dockr")
 #' # this concludes the preparations. 
@@ -74,7 +70,8 @@ prepare_docker_image <- function(pkg = ".",
                                  recommended = FALSE,
                                  dir_src = NULL,
                                  prioritize_cran = TRUE,
-                                 overwrite = TRUE) {
+                                 overwrite = TRUE,
+                                 ...) {
 
   # validate inputs.
   if (!is.null(r_version)) {
@@ -138,7 +135,8 @@ prepare_docker_image <- function(pkg = ".",
   build_and_install_package(pkg = pkg,
                             paths$dir_source_packages,
                             paths$pkgname_pkgvrs,
-                            verbose)
+                            verbose,
+                            ...)
 
   # open connection to Dockerfile.
   Dockerfile <- file(paths$path_Dockerfile)

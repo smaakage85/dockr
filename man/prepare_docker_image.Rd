@@ -8,7 +8,7 @@ prepare_docker_image(pkg = ".", dir_image = NULL,
   print_dockerfile = FALSE, dir_install = NULL, verbose = TRUE,
   r_version = NULL, dependencies = c("Depends", "Imports",
   "LinkingTo"), base = FALSE, recommended = FALSE, dir_src = NULL,
-  prioritize_cran = TRUE, overwrite = TRUE)
+  prioritize_cran = TRUE, overwrite = TRUE, ...)
 }
 \arguments{
 \item{pkg}{Path to a package, or within a package.}
@@ -58,6 +58,8 @@ with CRAN be prioritized over matches with local source packages?}
 \item{overwrite}{\code{logical} if the directory for the files for the
 Docker image already exists and is non-empty, should it be 
 deleted/overwritten?}
+
+\item{...}{optional arguments for `install.packages()`.}
 }
 \value{
 \code{list} relevant meta data of the files, that constitute
@@ -75,11 +77,6 @@ Docker r-base image.
 }
 \examples{
 \dontrun{
-# some preparations for this example (you will typically not have to do this).
-# set repos (temporarily).
-opts <- options()
-options(repos = c(CRAN = "https://cran.rstudio.com/"))
-
 # retrieve package directory for the 'dockr' package.
 package_dir <- system.file(package = "dockr")
 # this concludes the preparations. 

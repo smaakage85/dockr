@@ -1,3 +1,3 @@
-# dockr 0.8.3
+# dockr 0.8.4
 
 * First submission to CRAN.

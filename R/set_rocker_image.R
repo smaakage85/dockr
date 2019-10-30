@@ -10,7 +10,7 @@ set_rocker_image <- function(r_version = NULL) {
   
   # get R version number.
   if (is.null(r_version)) {
-    r_version <- strsplit(R.Version()[['version.string']], ' ')[[1]][3]
+    r_version <- getRversion()
   }
   
   sprintf("FROM rocker/r-ver:%s", r_version)

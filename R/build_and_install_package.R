@@ -11,6 +11,7 @@
 #'  image.
 #' @param pkgname_pkgversion \code{character} the package name concatenated
 #' with the version number of the package.
+#' @param ... optional arguments for install packages.
 #'
 #' @return invisibly. The package is built, installed and loaded as side 
 #' effects. Furthermore the source package is saved in the folder containing 
@@ -21,7 +22,8 @@
 build_and_install_package <- function(pkg = ".",
                                       dir_source_packages,
                                       pkgname_pkgversion,
-                                      verbose = FALSE) {
+                                      verbose = FALSE,
+                                      ...) {
 
   if (verbose) {
     cat_bullet("Building, installing and loading package...",
@@ -42,7 +44,8 @@ build_and_install_package <- function(pkg = ".",
 
   # install package.
   install.packages(pkgs = paste0(file.path(dir_source_packages, pkgname_pkgversion), ".tar.gz"),
-                   repos = NULL)
+                   repos = NULL, 
+                   ...)
 
   # return invisibly.
   invisible(NULL)

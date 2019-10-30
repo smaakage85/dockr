@@ -1,6 +1,6 @@
 Package: dockr
 Title: Creation of Lightweight Docker Images for Your Packages
-Version: 0.8.3
+Version: 0.8.4
 Authors@R: 
     person(given = "Lars",
            family = "Kjeldgaard",
