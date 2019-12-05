@@ -88,8 +88,5 @@ img <- prepare_docker_image(pkg = package_dir, dir_image = tempdir(), dir_instal
 
 # look up meta data for files for Docker image.
 img
-
-# clean up and reset options.
-options(opts)
 }
 }

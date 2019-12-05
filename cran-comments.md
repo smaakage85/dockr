@@ -1,9 +1,8 @@
 This is a resubmission.
 
-I have fixed issues adressed by CRAN. I have
-- 'build_and_install_package': allow optional arguments for install.packages
-- 'set_rocker_image': use getRversion()
-- removed repos-settings from example
+I have fixed issue adressed by CRAN. I have
+- removed reference to object 'opts' (that did not exist) in example for 
+prepare_docker_image()
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes

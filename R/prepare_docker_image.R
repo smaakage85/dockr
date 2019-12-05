@@ -55,9 +55,6 @@
 #' 
 #' # look up meta data for files for Docker image.
 #' img
-#' 
-#' # clean up and reset options.
-#' options(opts)
 #' }
 prepare_docker_image <- function(pkg = ".",
                                  dir_image = NULL,
