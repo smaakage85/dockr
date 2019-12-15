@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # dockr
 
-`dockr` 0.8.5 is now available on CRAN. `dockr` is a minimal toolkit to build a 
+`dockr` 0.8.6 is now available on CRAN. `dockr` is a minimal toolkit to build a 
 lightweight Docker container image for your R package, in which the package 
 itself is available. The Docker image seeks to mirror your R session as close as 
 possible with respect to R specific dependencies. Both dependencies on CRAN 

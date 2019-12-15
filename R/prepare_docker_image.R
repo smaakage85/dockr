@@ -43,7 +43,7 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # retrieve package directory for the 'dockr' package.
 #' package_dir <- system.file(package = "dockr")
 #' # this concludes the preparations. 

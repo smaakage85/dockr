@@ -1,8 +1,8 @@
 This is a resubmission.
 
 I have fixed issue adressed by CRAN. I have
-- removed reference to object 'opts' (that did not exist) in example for 
-prepare_docker_image()
+- set example for `prepare_docker_image()` to `\donttest` in stead of `\dontrun`
+after a good discussion with Uwe Ligges.
 
 ## R CMD check results
 0 errors | 0 warnings | 0 notes
